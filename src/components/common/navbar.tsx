@@ -4,9 +4,12 @@ import Glow1 from "@/assets/background/bg-glow-1.svg";
 import Glow2 from "@/assets/background/bg-glow-2.svg";
 import LeftRectangle from "@/assets/background/bg-left.svg";
 import RightRectangle from "@/assets/background/bg-right.svg";
+import useAuthStore from "@/store/authStore";
 
 const Navbar = ({ isHome }: { isHome: boolean }) => {
   const navigate = useNavigate();
+  const { isAuthenticated, userInfo } = useAuthStore();
+  console.log("auth: ",isAuthenticated)
 
   return (
     <div className={`relative flex flex-col w-screen h-fit bg-navbar-color overflow-hidden`}>
@@ -21,18 +24,26 @@ const Navbar = ({ isHome }: { isHome: boolean }) => {
         )}
       </div>
       <div className="relative z-10 flex flex-row items-center text-white py-5 px-64 justify-between">
-        <div onClick={() => navigate("/")} className="text-3xl font-semibold cursor-pointer">AICe</div>
+        <div onClick={() => navigate("/")} className="text-3xl font-semibold cursor-pointer">
+          AICe
+        </div>
         <div className="flex flex-row gap-10">
-          <div onClick={() => navigate("/")} className="cursor-pointer">Home</div>
+          <div onClick={() => navigate("/")} className="cursor-pointer">
+            Home
+          </div>
           <div>About</div>
           <div>Jobs</div>
         </div>
-        <div className="flex flex-row">
-          <div onClick={() => navigate("/auth/signin")} className="flex p-2 px-4 cursor-pointer">
-            Sign in
+        {isAuthenticated ? (
+          <div>Hello, {userInfo?.displayName}</div>
+        ) : (
+          <div className="flex flex-row">
+            <div onClick={() => navigate("/auth/signin")} className="flex p-2 px-4 cursor-pointer">
+              Sign in
+            </div>
+            <div className="flex p-2 border-white border rounded-lg px-4 cursor-pointer">Sign Up</div>
           </div>
-          <div className="flex p-2 border-white border rounded-lg px-4 cursor-pointer">Sign Up</div>
-        </div>
+        )}
       </div>
 
       {/* for homepage only */}

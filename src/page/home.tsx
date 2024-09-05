@@ -20,14 +20,20 @@ const Home = () => {
           type="text"
           onChange={(e) => setJobPosting(e.target.value)} 
           className="w-[640px] border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue" 
-          placeholder="drop your link url here"
+          placeholder="Job Title"
+          />
+        <input 
+          type="text"
+          onChange={(e) => setJobPosting(e.target.value)} 
+          className="w-[640px] border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue" 
+          placeholder="Job Description"
           />
         <div className="flex flex-row gap-6">
             <div onClick={() => navigate("/questions")} className="py-5 px-8 cursor-pointer bg-button-color flex items-center justify-center text-white rounded-lg font-bold">
                 Get interview questions
             </div>
             <div className="py-5 px-8 bg-button-color flex items-center justify-center text-white rounded-lg font-bold">
-                Grade my answers
+                Analyze my resume
             </div>
         </div>
       </div>

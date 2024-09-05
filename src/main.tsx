@@ -12,13 +12,14 @@ import "@fontsource/inter/800.css"
 import "@fontsource/inter/900.css"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
-import Login from './page/login'
-import Register from './page/register'
+import Login from './page/auth/login'
+import Register from './page/auth/register'
 import Home from './page/home'
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import Questions from './page/questions'
+import Questions from './page/vacancy/questions'
 // import Interview2 from './page/interview-1'
-import Interview from './page/interview'
+import Interview from './page/interview/interview'
+import InterviewAnalysisResult from './page/interview/analysisResult'
 
 
 const router = createBrowserRouter([
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "interview",
         element: <Interview />
+      },
+      {
+        path: "interview-result",
+        element: <InterviewAnalysisResult />
       }
     ],
     errorElement: <div>Error</div>

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Camera, Pause, Play, Square, RotateCcw, Send } from "lucide-react";
 import Navbar from "@/components/common/navbar";
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 
 const MAX_DURATION = 10 * 60;
 
@@ -111,6 +112,27 @@ const Interview = () => {
 
   const submitVideo = () => {
     console.log("Submitting video:", recordedVideoUrl);
+    (async () => {
+      try {
+        const blob = new Blob(recordedChunks.current, { type: 'video/mp4' });
+
+        const formData = new FormData();
+        formData.append('file', blob, 'video.mp4');
+        formData.append('question', question);
+  
+        // Post the FormData object to the server
+        const uploadResponse = await axios.post('https://mutawallle-compfest-api.hf.space/upload-video', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + '',
+          },
+        });
+  
+        console.log('Upload successful:', uploadResponse.data);
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+    })();
   };
 
   const startTimer = () => {
