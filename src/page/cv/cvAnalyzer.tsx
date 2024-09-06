@@ -69,21 +69,27 @@ const CVAnalyzer = () => {
           <div className="font-bold text-4xl text-center  text-primary-blue">Analyze your resume!</div>
 
           {/* Job Title Input */}
+          <div className="flex flex-col gap-2">
+          <div className="font-semibold text-xl text-primary-blue">Job title</div>
           <input
             type="text"
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
-            className="w-full border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue"
+            className="w-full border-primary-blue text-lg border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue"
             placeholder="Job Title"
           />
+          </div>
 
           {/* Job Description Input */}
+          <div className="flex flex-col gap-2">
+          <div className="font-semibold text-xl text-primary-blue">Job description</div>
           <textarea
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
-            className="w-full h-72 text-start border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue"
+            className="w-full h-72 text-start text-lg border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-normal placeholder:text-opacity-50 placeholder:text-primary-blue"
             placeholder="Job Description"
           />
+          </div>
 
           {/* File Upload Section */}
           <div className="flex flex-row w-full">

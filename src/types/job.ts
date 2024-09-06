@@ -2,6 +2,6 @@ export interface Job {
   id: string;
   title: string;
   description: string;
-  createdAt: string;
+  created_at: string;
   updatedAt: string;
 }

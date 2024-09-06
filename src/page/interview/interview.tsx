@@ -73,7 +73,7 @@ const Interview = () => {
     }).catch((error) => {
       console.error("Error fetching question:", error);
     });
-    
+
     (async () => {
       try {
         const videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -335,7 +335,7 @@ const Interview = () => {
               </label>
             </div>
             <input
-              id="videoUploder"
+              id="videoUploader"
               type="file"
               accept="*.mp4"
               onChange={(e) => {

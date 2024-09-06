@@ -49,12 +49,12 @@ const Home = () => {
           <input
             type="text"
             onChange={(e) => setJobTitle(e.target.value)}
-            className="w-[640px] border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue"
+            className="w-[640px] border-primary-blue border-1 border rounded-md py-4 px-4 text-lg text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue"
             placeholder="Job Title"
           />
           <textarea
             onChange={(e) => setJobDescription(e.target.value)}
-            className="w-[640px] border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue"
+            className="w-[640px] border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue text-lg font-normal placeholder:text-opacity-50 placeholder:text-primary-blue"
             placeholder="Job Description"
           />
           {errorMessage && <div className="text-red-700 font-semibold">{errorMessage}</div>}

@@ -5,7 +5,7 @@ import { Interview, InterviewStatus } from "@/types/interview";
 import { Job } from "@/types/job";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { format, addHours } from 'date-fns';
 
 const Dashboard = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -13,6 +13,12 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const utcPlus7Date = addHours(date, 7);
+    const formattedDate = format(utcPlus7Date, 'dd MMM yyyy HH:mm a');
+    return formattedDate;
+  } 
   useEffect(() => {
     getVacancies()
       .then((res) => {
@@ -53,9 +59,9 @@ const Dashboard = () => {
                   <div className="flex flex-col justify-between gap-2">
                     <div className="text-2xl font-bold text-primary-blue">{job.title}</div>
                     <div className="text-lg text-primary-blue font-semibold">{job.description}</div>
-                    <div className="text-lg text-primary-blue pt-12">Generated on {job.createdAt}</div>
+                    <div className="text-lg text-primary-blue pt-12">Generated on {formatDate(job.created_at)}</div>
                   </div>
-                  <div onClick={()=> navigate(`/questions/${job.id}`)} className="py-4 px-6 bg-primary-blue text-white font-bold w-fit flex items-center justify-center cursor-pointer h-fit rounded-md">View Questions</div>
+                  <div onClick={()=> navigate(`/questions/${job.id}`)} className="py-4 px-6 bg-primary-blue text-white font-bold w-fit flex items-center justify-center cursor-pointer h-fit rounded-md text-nowrap">View Questions</div>
                 </div>
               ))}
             </div>
@@ -75,7 +81,7 @@ const Dashboard = () => {
                 <div key={idx} className="flex flex-row w-full py-4 px-6 bg-white rounded-lg gap-4 justify-between">
                   <div className="flex flex-col justify-between gap-2">
                     <div className="text-2xl font-bold text-[#a057e9]">{interview.question}</div>
-                    <div className="text-lg text-[#a057e9] pt-12">Generated on {interview.updatedAt}</div>
+                    <div className="text-lg text-[#a057e9] pt-12">Generated on {formatDate(interview.created_at || "")}</div>
                   </div>
                   <div onClick={() => navigate(`/interview-analysis-result/${interview.id}`)} className="py-4 px-6 bg-[#a057e9] text-white font-bold w-fit hover:bg-opacity-80 flex items-center h-fit rounded-md justify-center cursor-pointer text-nowrap">{interview.status === InterviewStatus.SUCCESS ? "View Analysis" : "Analyzing..."}</div>
                 </div>
