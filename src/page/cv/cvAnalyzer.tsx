@@ -117,7 +117,7 @@ const CVAnalyzer = () => {
               <div className="flex flex-col rounded-lg gap-2 w-[50%] bg-white p-4">
                 <div className="text-xl font-bold">Jobs keywords</div>
                 <div className="flex flex-wrap">
-                  {result.jobsKeywords?.map((keyword: string, index: number) => (
+                  {result.jobKeywords?.map((keyword: string, index: number) => (
                     <div key={index} className="bg-primary-blue text-white rounded-lg py-2 px-4 m-1">
                       {keyword}
                     </div>

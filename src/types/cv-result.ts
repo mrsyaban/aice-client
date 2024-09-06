@@ -1,5 +1,5 @@
 export interface CvResult {
-  jobsKeywords: string[];
+  jobKeywords: string[];
   resumeKeywords: string[];
   RelevanceScore: number;
   quantifiedScore: number;
