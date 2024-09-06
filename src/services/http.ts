@@ -6,6 +6,7 @@ const createAxiosInstance = (): AxiosInstance => {
     baseURL: `${import.meta.env.VITE_API_URL}`,
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      UserInfo: `${localStorage.getItem("user_info") || ""}`,
     },
   });
 

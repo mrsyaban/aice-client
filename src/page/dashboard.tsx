@@ -1,33 +1,36 @@
 import FeatureCard from "@/components/card/feature";
 import Navbar from "@/components/common/navbar";
+import { getInterviews, getVacancies } from "@/services/api";
+import { Interview, InterviewStatus } from "@/types/interview";
+import { Job } from "@/types/job";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const jobs = [
-  {
-    title: "Software Engineer",
-    createdAt: "2021-09-12",
-  },
-  {
-    title: "Software Engineer",
-    createdAt: "2021-09-12",
-  },
-];
-
-const interviews = [
-  {
-    id: 1,
-    question: "Tell me about yourself!",
-    status: "graded",
-    updatedAt: "2021-09-12",
-  },
-  {
-    id: 1,
-    question: "Tell me about yourself!",
-    status: "video uploaded",
-    updatedAt: "2021-09-12",
-  }
-];
 
 const Dashboard = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [interviews, setInterviews] = useState<Interview[]>([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getVacancies()
+      .then((res) => {
+        setJobs(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    getInterviews()
+      .then((res) => {
+        setInterviews(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <>
       <Navbar isHome={false} />
@@ -43,37 +46,42 @@ const Dashboard = () => {
         {/* jobs */}
         <div className="flex flex-col h-fit gap-8 items-center w-full max-w-[1000px] mx-auto">
           <div className="text-3xl font-bold text-primary-blue w-full text-start">Jobs you've generated</div>
-          <div className="flex flex-col gap-6 w-full ">
-            {jobs.map((job, idx) => (
-              <div key={idx} className="flex flex-row w-full py-4 px-6 bg-white rounded-lg gap-4 justify-between">
-                <div className="flex flex-col justify-between gap-2">
-                  <div className="text-2xl font-bold text-primary-blue">{job.title}</div>
-                  <div className="text-lg text-primary-blue">Generated on {job.createdAt}</div>
+          {jobs.length > 0 ? (
+            <div className="flex flex-col gap-6 w-full ">
+              {jobs.map((job, idx) => (
+                <div key={idx} className="flex flex-row w-full py-4 px-6 bg-white rounded-lg gap-4 justify-between">
+                  <div className="flex flex-col justify-between gap-2">
+                    <div className="text-2xl font-bold text-primary-blue">{job.title}</div>
+                    <div className="text-lg text-primary-blue font-semibold">{job.description}</div>
+                    <div className="text-lg text-primary-blue pt-12">Generated on {job.createdAt}</div>
+                  </div>
+                  <div onClick={()=> navigate(`/questions/${job.id}`)} className="py-4 px-6 bg-primary-blue text-white font-bold w-fit flex items-center justify-center cursor-pointer h-fit rounded-md">View Questions</div>
                 </div>
-                <div className="py-4 px-6 bg-primary-blue text-white font-bold w-fit flex items-center justify-center cursor-pointer">
-                  View Questions
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex w-full py-4 px-6 bg-white rounded-lg text-lg justify-center">You don't have any generated jobs yet.</div>
+          )}
         </div>
 
         {/* interview questions analyzed */}
         <div className="flex flex-col h-fit gap-8 items-center w-full max-w-[1000px] mx-auto">
           <div className="text-3xl font-bold text-primary-blue w-full text-start">Analyzed interview</div>
-          <div className="flex flex-col gap-6 w-full max-w-[1000px]">
-            {interviews.map((interview, idx) => (
-              <div key={idx} className="flex flex-row w-full py-4 px-6 bg-white rounded-lg gap-4 justify-between">
-                <div className="flex flex-col justify-between gap-2">
-                  <div className="text-2xl font-bold text-primary-blue">{interview.question}</div>
-                  <div className="text-lg text-primary-blue">Generated on {interview.updatedAt}</div>
+          {interviews.length === 0 ? (
+            <div className="flex w-full py-4 px-6 bg-white rounded-lg text-lg justify-center">You don't have any analyzed interviews yet.</div>
+          ) : (
+            <div className="flex flex-col gap-6 w-full max-w-[1000px]">
+              {interviews.map((interview, idx) => (
+                <div key={idx} className="flex flex-row w-full py-4 px-6 bg-white rounded-lg gap-4 justify-between">
+                  <div className="flex flex-col justify-between gap-2">
+                    <div className="text-2xl font-bold text-primary-blue">{interview.question}</div>
+                    <div className="text-lg text-primary-blue pt-12">Generated on {interview.updatedAt}</div>
+                  </div>
+                  <div className="py-4 px-6 bg-primary-blue text-white font-bold w-fit hover:bg-opacity-80 flex items-center h-fit rounded-md justify-center cursor-pointer text-nowrap">{interview.status === InterviewStatus.SUCCESS ? "View Analysis" : "Analyzing..."}</div>
                 </div>
-                <div className="py-4 px-6 bg-primary-blue text-white font-bold w-fit flex items-center justify-center cursor-pointer">
-                  {interview.status === "graded" ? "View Analyzed" : "Analyzing..."}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>

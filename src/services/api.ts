@@ -8,17 +8,19 @@ export async function reset() {
 // vacancy
 export async function getVacancies() {
   const res = await Axios.get(`/vacancy`);
-  return res.data;
+  return res.data.vacancies;
 }
 
-export async function getVacancyById(vacancyId: string) {
+export async function getVacancyById(vacancyId: string | undefined) {
+    if (!vacancyId) return null;
   const res = await Axios.get(`/vacancy/${vacancyId}`);
   return res.data;
 }
 
-export async function getQuestionsByVacancy(vacancyId: string) {
-  const res = await Axios.get(`/question-by-vacancy/${vacancyId}`);
-  return res.data;
+export async function getQuestionsByVacancy(vacancyId: string | undefined) {
+  if (!vacancyId) return [];
+  const res = await Axios.get(`/questions-by-vacancy/${vacancyId}`);
+  return res.data.questions;
 }
 
 export async function addVacancy(jobTitle: string, jobDescription: string) {
@@ -32,7 +34,7 @@ export async function addVacancy(jobTitle: string, jobDescription: string) {
 // interview
 export async function getInterviews() {
   const res = await Axios.get(`/questions`);
-  return res.data;
+  return res.data.questions;
 }
 
 export async function getInterviewById(interviewId: string) {
@@ -40,7 +42,7 @@ export async function getInterviewById(interviewId: string) {
   return res.data;
 }
 
-export async function addInterview(question: string, interviewVideo: string) {
+export async function addInterview(question: string, interviewVideo: Blob) {
   const formData = new FormData();
   formData.append("question", question);
   formData.append("file", interviewVideo);

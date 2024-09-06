@@ -40,7 +40,8 @@ const GoogleAuthButton = () => {
         };
         // Store user information in Zustand and local storage
         setUserInfo(userInfo);
-        navigate("/");
+        navigate("/dashboard");
+        navigate(0);
       } catch (error) {
         console.error("Error:", error);
       }
