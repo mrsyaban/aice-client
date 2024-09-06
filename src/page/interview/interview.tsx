@@ -4,7 +4,7 @@ import Navbar from "@/components/common/navbar";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { addInterview, addInterviewById } from "@/services/api";
 import toast, { Toaster } from "react-hot-toast";
-
+import { Loader2 } from "lucide-react";
 
 const MAX_DURATION = 10 * 60;
 
@@ -21,6 +21,8 @@ const Interview = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
 
   const [videoUploaded, setVideoUploaded] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>("");
@@ -39,7 +41,7 @@ const Interview = () => {
       toast.error("Please select a video to upload.");
       return;
     }
-
+    setIsLoading2(true);
     if (videoUploaded) {
       (async () => {
         try {
@@ -51,9 +53,11 @@ const Interview = () => {
           }
           console.log("Upload successful:", message);
           toast.success(message);
-          navigate(0);
+          navigate("/dashboard");
         } catch (error) {
           console.error("Upload failed:", error);
+        } finally {
+          setIsLoading2(false);
         }
       })();
     }
@@ -157,16 +161,19 @@ const Interview = () => {
           const blob = new Blob(recordedChunks.current, { type: "video/mp4" });
           const file = new File([blob], "interview-video.mp4", { type: "video/mp4" });
           let message = "";
+          setIsLoading(true);
           if (!questionId) {
             message = await addInterview(question, file);
           } else {
             message = await addInterviewById(questionId, file);
           }
           console.log("Upload successful:", message);
+          navigate("/dashboard");
           toast.success(message);
-          navigate(0);
         } catch (error) {
           console.error("Upload failed:", error);
+        } finally {
+          setIsLoading(false);
         }
       })();
   };
@@ -283,8 +290,17 @@ const Interview = () => {
                     <RotateCcw size={20} />
                   </button>
                   <button onClick={submitVideo} className="bg-button-color text-white rounded-full p-2 flex items-center">
-                    <Send size={20} />
-                    <span className="ml-2">Analyze</span>
+                    {isLoading ? (
+                      <div className="flex flex-row w-full justify-center items-center gap-2">
+                        <Loader2 className="animate-spin" />
+                        Loading...
+                      </div>
+                    ) : (
+                      <>
+                        <Send size={20} />
+                        <span className="ml-2">Analyze</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -324,8 +340,17 @@ const Interview = () => {
             />
           </div>
           <button onClick={submitVideoUpload} className="bg-button-color text-white rounded-lg p-2 flex items-center">
-            <Send size={20} />
-            <span className="ml-2 font-bold">Analyze</span>
+            {isLoading ? (
+              <div className="flex flex-row w-full justify-center items-center gap-2">
+                <Loader2 className="animate-spin" />
+                Loading...
+              </div>
+            ) : (
+              <>
+                <Send size={20} />
+                <span className="ml-2 font-bold">Analyze</span>
+              </>
+            )}
           </button>
         </div>
       </div>

@@ -51,7 +51,7 @@ export async function addInterview(question: string, interviewVideo: File) {
   formData.append("question", question);
   formData.append("file", interviewVideo);
   const res = await Axios.post(`/question`, formData);
-  return res.data;
+  return res.data.message;
 }
 
 export async function addInterviewById(questionId: string, interviewVideo: File) {
@@ -59,7 +59,7 @@ export async function addInterviewById(questionId: string, interviewVideo: File)
   formData.append("id", questionId);
   formData.append("file", interviewVideo);
   const res = await Axios.post(`/answer-question`, formData);
-  return res.data;
+  return res.data.message;
 }
 
 
