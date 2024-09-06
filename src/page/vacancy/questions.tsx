@@ -37,7 +37,7 @@ const Questions = () => {
         <div className="flex w-full text-white font-bold text-3xl bg-primary-blue py-8 justify-center rounded-lg">{vacancyInfo?.title}</div>
         <div className="flex flex-col gap-10 items-center h-fit ">
           {questions.map((question, index) => (
-            <Question key={index} question={question.question} answer={question.example_answer} />
+            <Question key={index} id={question.id} question={question.question} answer={question.example_answer} />
           ))}
         </div>
       </div>

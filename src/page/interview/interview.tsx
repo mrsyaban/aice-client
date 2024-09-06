@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Camera, Pause, Play, Square, RotateCcw, Send } from "lucide-react";
 import Navbar from "@/components/common/navbar";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { addInterview, addInterviewById } from "@/services/api";
+import { addInterview, addInterviewById, getInterviewById } from "@/services/api";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 
@@ -66,6 +66,14 @@ const Interview = () => {
   useEffect(() => {
     const questionId = searchParams.get("id") || "";
     setQuestionId(questionId);
+
+    if (!questionId) return;
+    getInterviewById(questionId).then((question) => {
+      setQuestion(question.question);
+    }).catch((error) => {
+      console.error("Error fetching question:", error);
+    });
+    
     (async () => {
       try {
         const videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -340,7 +348,7 @@ const Interview = () => {
             />
           </div>
           <button onClick={submitVideoUpload} className="bg-button-color text-white rounded-lg p-2 flex items-center">
-            {isLoading ? (
+            {isLoading2 ? (
               <div className="flex flex-row w-full justify-center items-center gap-2">
                 <Loader2 className="animate-spin" />
                 Loading...
