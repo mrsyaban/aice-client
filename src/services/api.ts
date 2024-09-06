@@ -54,7 +54,8 @@ export async function addInterview(question: string, interviewVideo: Blob) {
   return res.data;
 }
 
-export async function getInterviewResult(vacancyId: string) {
+export async function getInterviewResult(vacancyId: string | undefined) {
+  if (!vacancyId) return [];
   const res = await Axios.get(`/question-result/${vacancyId}`);
   return res.data;
 }

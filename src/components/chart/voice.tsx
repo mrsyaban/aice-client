@@ -12,19 +12,21 @@ ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement);
 
 interface AggregatedLineChartProps {
   data: number[];
+  data2: number[]; // Second data set
   totalVideoLength: number; // Total video length in seconds
   interval?: number; // Time interval for aggregation (default is 1 second)
 }
 
 const AggregatedLineChart: React.FC<AggregatedLineChartProps> = ({
   data,
+  data2,
   totalVideoLength,
   interval = 1, // Aggregate per 1 second by default
 }) => {
-  // Aggregate data by averaging over the given time interval
+  // Function to aggregate data by averaging over the given time interval
   const aggregateData = (data: number[], interval: number) => {
     const aggregated: number[] = [];
-    const chunkSize = Math.floor(data.length / totalVideoLength * interval);
+    const chunkSize = Math.floor((data.length / totalVideoLength) * interval);
 
     for (let i = 0; i < data.length; i += chunkSize) {
       const chunk = data.slice(i, i + chunkSize);
@@ -35,22 +37,31 @@ const AggregatedLineChart: React.FC<AggregatedLineChartProps> = ({
     return aggregated;
   };
 
-  // Calculate aggregated data
+  // Calculate aggregated data for both datasets
   const aggregatedData = aggregateData(data, interval);
+  const aggregatedData2 = aggregateData(data2, interval);
 
   // Generate time labels based on the aggregation interval
   const labels = aggregatedData.map((_, index) => (index * interval).toFixed(2) + 's');
 
-  // Chart data
+  // Chart data including both datasets
   const chartData = {
     labels: labels,
     datasets: [
       {
-        label: 'Aggregated Data',
+        label: 'Voice clarity',
         data: aggregatedData,
         fill: false,
         borderColor: '#4A90E2',
         backgroundColor: '#4A90E2',
+        tension: 0.4, // Makes the line smooth
+      },
+      {
+        label: 'Body language',
+        data: aggregatedData2,
+        fill: false,
+        borderColor: '#E24A4A',
+        backgroundColor: '#E24A4A',
         tension: 0.4, // Makes the line smooth
       },
     ],

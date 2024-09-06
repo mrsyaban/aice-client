@@ -1,9 +1,9 @@
 export interface Emotion {
-  anger: number;
+  angry: number;
   disgust: number;
   fear: number;
-  joy: number;
-  sadness: number;
-  surprise: number;
+  happy: number;
   neutral: number;
+  sad: number;
+  surprise: number;
 }

@@ -29,11 +29,19 @@ const EmotionChart = ({ data }:{data: Emotion}) => {
   // Prepare chart data
   console.log(data);
   const chartData = {
-    labels: ['Sad', 'Neutral', 'Happy'],
+    labels: ['Anger', 'Disgust', 'Fear', 'Happiness', 'Neutral', 'Sadness', 'Surprise'],
     datasets: [
       {
         label: 'Emotion Percentage',
-        data: [data.sadness*100, data.neutral*100, data.joy*100],
+        data: [
+          data.angry * 100,
+          data.disgust * 100,
+          data.fear * 100,
+          data.happy * 100,
+          data.neutral * 100,
+          data.sad * 100,
+          data.surprise * 100,
+        ],
         backgroundColor: ['#471f59', '#bdbdbd', '#3450b6'],
         borderWidth: 1,
       },

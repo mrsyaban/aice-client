@@ -1,32 +1,19 @@
+import ScoreBarChart from "@/components/chart/bar-score";
 import Navbar from "@/components/common/navbar";
 import { analyzeCV } from "@/services/api";
 import { CvResult } from "@/types/cv-result";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
-const dummyResult = {
-  summary:
-    "Dalam analisis ini, kami menemukan bahwa kamu sudah menunjukkan antusiasme dalam menceritakan proyek yang pernah kamu kerjakan. Namun, ada beberapa hal yang bisa kamu perbaiki agar ceritamu lebih meyakinkan. Berikut adalah beberapa saran yang bisa kamu pertimbangkan untuk meningkatkan kualitas ceritamu:",
-  jobsKeywords: ["Frontend Developer", "React", "Node.js", "Express.js", "MongoDB", "RESTful API"],
-  resumeKeywords: ["Frontend Developer", "React", "Node.js", "Express.js", "MongoDB", "RESTful API"],
-  improvement: [
-    "Meskipun kamu sudah menunjukkan antusiasme, ada baiknya jika kamu bisa lebih bersemangat lagi ketika menceritakan tentang proyek yang menurutmu paling membanggakan. Semangatmu bisa menular dan membuat kami lebih tertarik dengan apa yang kamu kerjakan.",
-    "Ketika menceritakan tentang pencapaianmu dalam meningkatkan konversi, coba berikan contoh yang lebih spesifik. Misalnya, fitur apa yang kamu kembangkan dan bagaimana fitur tersebut mempengaruhi perilaku pengguna? Dengan contoh yang konkret, kamu bisa lebih meyakinkan kami akan dampak positif yang kamu berikan.",
-    "Meskipun kamu sudah menunjukkan antusiasme, ada baiknya jika kamu bisa lebih bersemangat lagi ketika menceritakan tentang proyek yang menurutmu paling membanggakan. Semangatmu bisa menular dan membuat kami lebih tertarik dengan apa yang kamu kerjakan.",
-    "Ketika menceritakan tentang pencapaianmu dalam meningkatkan konversi, coba berikan contoh yang lebih spesifik. Misalnya, fitur apa yang kamu kembangkan dan bagaimana fitur tersebut mempengaruhi perilaku pengguna? Dengan contoh yang konkret, kamu bisa lebih meyakinkan kami akan dampak positif yang kamu berikan.",
-    "Meskipun kamu sudah menunjukkan antusiasme, ada baiknya jika kamu bisa lebih bersemangat lagi ketika menceritakan tentang proyek yang menurutmu paling membanggakan. Semangatmu bisa menular dan membuat kami lebih tertarik dengan apa yang kamu kerjakan.",
-    "Ketika menceritakan tentang pencapaianmu dalam meningkatkan konversi, coba berikan contoh yang lebih spesifik. Misalnya, fitur apa yang kamu kembangkan dan bagaimana fitur tersebut mempengaruhi perilaku pengguna? Dengan contoh yang konkret, kamu bisa lebih meyakinkan kami akan dampak positif yang kamu berikan.",
-    "Meskipun kamu sudah menunjukkan antusiasme, ada baiknya jika kamu bisa lebih bersemangat lagi ketika menceritakan tentang proyek yang menurutmu paling membanggakan. Semangatmu bisa menular dan membuat kami lebih tertarik dengan apa yang kamu kerjakan.",
-    "Ketika menceritakan tentang pencapaianmu dalam meningkatkan konversi, coba berikan contoh yang lebih spesifik. Misalnya, fitur apa yang kamu kembangkan dan bagaimana fitur tersebut mempengaruhi perilaku pengguna? Dengan contoh yang konkret, kamu bisa lebih meyakinkan kami akan dampak positif yang kamu berikan.",
-  ],
-};
 
 const CVAnalyzer = () => {
   const [jobTitle, setJobTitle] = useState<string>("");
   const [jobDescription, setJobDescription] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [result, setResult] = useState<CvResult | null>(null);
   const [searchParams] = useSearchParams();
@@ -37,7 +24,6 @@ const CVAnalyzer = () => {
     setJobTitle(jobTitleParam);
     setJobDescription(jobDescriptionParam);
   }, [searchParams]);
-
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -62,12 +48,15 @@ const CVAnalyzer = () => {
       toast.error("Please fill in the job title and job description before submitting.");
       return;
     }
+    setIsLoading(true);
     try {
-      const result = await analyzeCV(pdfFile, jobTitle, jobDescription);
-      setResult(result);
-      setResult(dummyResult);
+      const resultTemp = await analyzeCV(pdfFile, jobTitle, jobDescription);
+      setResult(resultTemp);
+      console.log(resultTemp);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,27 +98,36 @@ const CVAnalyzer = () => {
 
           {/* Submit Button */}
           <button onClick={handleSubmit} className="bg-button-color text-white text-xl font-semibold py-3 px-6 rounded-lg mt-4">
-            Analyze
+            {isLoading ? (
+              <div className="flex flex-row w-full justify-center items-center gap-2">
+                <Loader2 className="animate-spin" />
+                Loading...
+              </div>
+            ) : (
+              "Analyze"
+            )}
           </button>
         </div>
         {/* result */}
         {result && (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 w-[60%]">
+            <ScoreBarChart value={result.RelevanceScore} label="Relevance Score" desc="indicating how well your resume aligns with the job requirements" />
+            <ScoreBarChart value={result.quantifiedScore} label="Quantification Score" desc="indicating the level of quantification in the resume"/>
             <div className="flex flex-row gap-6">
-              <div className="flex flex-col rounded-lg gap-2 bg-white p-4">
+              <div className="flex flex-col rounded-lg gap-2 w-[50%] bg-white p-4">
                 <div className="text-xl font-bold">Jobs keywords</div>
                 <div className="flex flex-wrap">
-                  {result.jobsKeywords.map((keyword: string, index: number) => (
+                  {result.jobsKeywords?.map((keyword: string, index: number) => (
                     <div key={index} className="bg-primary-blue text-white rounded-lg py-2 px-4 m-1">
                       {keyword}
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col rounded-lg gap-2 bg-white p-4">
+              <div className="flex flex-col rounded-lg gap-2 w-[50%] bg-white p-4">
                 <div className="text-xl font-bold">Your resume keywords</div>
                 <div className="flex flex-wrap">
-                  {result.resumeKeywords.map((keyword: string, index: number) => (
+                  {result.resumeKeywords?.map((keyword: string, index: number) => (
                     <div key={index} className="bg-primary-blue text-white rounded-lg py-2 px-4 m-1">
                       {keyword}
                     </div>

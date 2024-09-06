@@ -29,7 +29,6 @@ const AIMockInterview = () => {
     }
   };
 
-
   return (
     <div className="h-screen w-full bg-primary-white">
       <Navbar isHome={false} />

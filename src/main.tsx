@@ -57,7 +57,7 @@ const router = createBrowserRouter([
         element: <Interview />
       },
       {
-        path: "interview-result",
+        path: "interview-analysis-result/:id",
         element: <InterviewAnalysisResult />
       },
       {
@@ -71,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: "mock-interview",
         element: <AIMockInterview />
+      },
+      {
+        path: "*",
+        element: <div>Not Found</div>
       }
     ],
     errorElement: <div>Error</div>
