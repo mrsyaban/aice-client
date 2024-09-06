@@ -20,6 +20,8 @@ import Questions from './page/vacancy/questions'
 // import Interview2 from './page/interview-1'
 import Interview from './page/interview/interview'
 import InterviewAnalysisResult from './page/interview/analysisResult'
+import Dashboard from './page/dashboard'
+import CVAnalyzer from './page/cv/cvAnalyzer'
 
 
 const router = createBrowserRouter([
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
       {
         path: "interview-result",
         element: <InterviewAnalysisResult />
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />
+      },
+      {
+        path: "cv-analyzer",
+        element: <CVAnalyzer />
       }
     ],
     errorElement: <div>Error</div>

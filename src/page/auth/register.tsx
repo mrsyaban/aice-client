@@ -1,27 +1,10 @@
+import GoogleAuthButton from "@/components/auth/google";
 import Navbar from "@/components/common/navbar";
-import api from "@/util/api";
-import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
 
 const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const login = useGoogleLogin({
-    onSuccess: (token) => {
-      localStorage.setItem("token", token.access_token);
-      console.log(token);
-      try {
-        api.get("/login", {
-          headers: {
-            Authorization: `Bearer ${token.access_token}`,
-          },
-        });
-      } catch {
-        console.log("error");
-      }
-    },
-  });
   return (
     <div className="bg-primary-white h-screen">
       <Navbar isHome={false} />
@@ -44,9 +27,7 @@ const Register = () => {
               or
               <hr />
             </div>
-            <button onClick={() => login()} className="flex flex-row items-center w-full border-2 gap-3 rounded-md px-5 py-3 cursor-pointer justify-center font-semibold text-lg">
-              <FcGoogle className="w-8 h-8" /> Continue with google
-            </button>
+            <GoogleAuthButton />
           </div>
         </div>
       </div>
