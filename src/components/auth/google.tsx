@@ -1,3 +1,4 @@
+import { userLogin } from "@/services/api";
 import useAuthStore from "@/store/authStore";
 import { UserInfo } from "@/types/user";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -40,6 +41,7 @@ const GoogleAuthButton = () => {
         };
         // Store user information in Zustand and local storage
         setUserInfo(userInfo);
+        userLogin();
         navigate("/dashboard");
         navigate(0);
       } catch (error) {

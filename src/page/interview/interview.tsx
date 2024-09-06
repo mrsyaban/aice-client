@@ -21,10 +21,12 @@ const Interview = () => {
   const [duration, setDuration] = useState<number>(0);
 
   const [searchParams] = useSearchParams();
-  const question = searchParams.get("question") || "Interview Question";
+  const [question, setQuestion] = useState<string>("");
 
   useEffect(() => {
-    const setupCamera = async () => {
+    const questionTemp = searchParams.get("question") || "";
+    setQuestion(questionTemp);
+    (async () => {
       try {
         const videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setStream(videoStream);
@@ -40,9 +42,7 @@ const Interview = () => {
       } catch (err) {
         console.error("Error accessing media devices.", err);
       }
-    };
-
-    setupCamera();
+    })();
 
     return () => {
       if (stream) {
@@ -100,7 +100,7 @@ const Interview = () => {
       setIsRecording(false);
       setIsPaused(false);
       stopTimer();
-      setDuration(timer)
+      setDuration(timer);
     }
   };
 
@@ -154,7 +154,7 @@ const Interview = () => {
   const formatTime = (time: number): string => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const handlePlayPause = () => {
@@ -197,51 +197,10 @@ const Interview = () => {
     <>
       <Navbar isHome={false} />
       <div className="flex flex-col px-[15%] 2xl:px-[25%] py-12 gap-8 items-center">
-        <div className="flex w-full text-white font-bold text-2xl bg-primary-blue py-4 justify-start px-12 rounded-lg">{question}</div>
+        <textarea placeholder="Put your interview question here" value={question} onChange={(e) => setQuestion(e.target.value)} className="flex h-fit w-full items-center text-primary-blue px-4 font-semibold text-2xl bg-white border-2 border-primary-blue py-4 rounded-lg" />
         <div className="w-full max-w-3xl bg-white rounded-lg shadow-md overflow-hidden">
           <div className="relative">
-            <video
-              ref={videoRef}
-              className="w-full h-auto"
-              autoPlay
-              playsInline
-              muted={isRecording || !recordedVideoUrl}
-              // controls={!!recordedVideoUrl}
-            />
-            {/* {!recordedVideoUrl && (
-              <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
-                {formatTime(timer)} / {formatTime(MAX_DURATION)}
-              </div>
-            )}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-4">
-              {!recordedVideoUrl ? (
-                !isRecording ? (
-                  <button onClick={startRecording} className="bg-red-500 hover:bg-red-600 text-white rounded-full p-3">
-                    <Camera size={24} />
-                  </button>
-                ) : (
-                  <>
-                    <button onClick={pauseRecording} className="bg-primary-blue hover:bg-yellow-600 text-white rounded-full p-3">
-                      {isPaused ? <Play size={24} /> : <Pause size={24} />}
-                    </button>
-                    <button onClick={stopRecording} className="bg-red-500 hover:bg-red-600 text-white rounded-full p-3">
-                      <Square size={24} />
-                    </button>
-                  </>
-                )
-              ) : (
-                <>
-                  <button onClick={retakeVideo} className="bg-primary-blue hover:bg-opacity-75 text-white rounded-full p-3">
-                    <RotateCcw size={24} />
-                  </button>
-                  <button onClick={submitVideo} className="bg-button-color hover:opacity-75 text-white rounded-md flex flex-row items-center font-bold text-lg gap-3 py-2 px-4">
-                    Analyze
-                    <Send size={20} />
-                  </button>
-                </>
-              )}
-              
-            </div> */}
+            <video ref={videoRef} className="w-full h-auto" autoPlay playsInline muted={isRecording || !recordedVideoUrl} />
             {!recordedVideoUrl && !isRecording && (
               <div className="absolute inset-0 flex-col gap-2 bg-black bg-opacity-70 flex items-center justify-center">
                 <button onClick={startRecording} className="bg-red-500 hover:bg-red-600 text-white rounded-full p-4">

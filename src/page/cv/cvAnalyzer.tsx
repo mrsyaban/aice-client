@@ -1,8 +1,9 @@
 import Navbar from "@/components/common/navbar";
 import { analyzeCV } from "@/services/api";
 import { CvResult } from "@/types/cv-result";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useSearchParams } from "react-router-dom";
 
 const dummyResult = {
   summary:
@@ -28,6 +29,15 @@ const CVAnalyzer = () => {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
 
   const [result, setResult] = useState<CvResult | null>(null);
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const jobTitleParam = searchParams.get("jobTitle") || "";
+    const jobDescriptionParam = searchParams.get("jobDescription") || "";
+    setJobTitle(jobTitleParam);
+    setJobDescription(jobDescriptionParam);
+  }, [searchParams]);
+
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -72,6 +82,7 @@ const CVAnalyzer = () => {
           {/* Job Title Input */}
           <input
             type="text"
+            value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
             className="w-full border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue"
             placeholder="Job Title"
@@ -79,6 +90,7 @@ const CVAnalyzer = () => {
 
           {/* Job Description Input */}
           <textarea
+            value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
             className="w-full h-72 text-start border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue font-semibold placeholder:text-opacity-50 placeholder:text-primary-blue"
             placeholder="Job Description"

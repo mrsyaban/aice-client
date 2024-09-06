@@ -1,0 +1,36 @@
+1. `summary`: 
+   - This provides an overall assessment of the interviewee's performance. It indicates that the interviewee did well and demonstrated relevant experience and enthusiasm but also highlights areas for improvement.
+
+2. `improvement`: 
+   - This is an array of specific suggestions for how the interviewee could improve. The suggestions focus on:
+     - Increasing enthusiasm when discussing significant projects to make a more compelling case.
+     - Providing more concrete examples of achievements, particularly those related to increasing conversions, to better demonstrate the impact of their work.
+
+3. `relevance`: 
+   - A score (between 0-1) indicating how relevant the interviewee's responses were to the position they are applying for. A higher score means the responses were more pertinent to the job requirements.
+
+4. `clarity`: 
+   - A score (between 0-1) representing how clear and understandable the interviewee's answers were. This measures how well the interviewee communicated their points.
+
+5. `originality`: 
+   - A score (between 0-1) reflecting the uniqueness of the interviewee’s responses. This assesses how much the answers differed from standard or expected responses.
+
+6. `engagement`: 
+   - A score (between 0-1) that combines body language and emotional expression to evaluate how engaging the interviewee was. It reflects the interviewee's overall presence and interaction during the interview.
+
+7. `emotion`: 
+   - This object contains scores for different emotional states expressed by the interviewee:
+     - `anger`: between 0-1
+     - `disgust`: between 0-1
+     - `fear`: between 0-1
+     - `joy`: between 0-1
+     - `sadness`: between 0-1
+     - `surprise`: between 0-1
+     - `neutral`: between 0-1
+   - These scores indicate the degree to which each emotion was detected in the interviewee's responses, with higher scores showing a stronger presence of that emotion.
+
+8. `voice`: 
+   - This likely refers to a detailed analysis of the interviewee's vocal qualities, such as tone, pitch, and modulation. The actual data (`clarityData`) is not provided in the snippet, but it would typically include metrics that assess how effectively the interviewee used their voice.
+
+9. `body`: 
+   - This array represents body language scores measured during the interview. The numbers correspond to various aspects of body language, such as posture, gestures, and eye contact, which are evaluated to understand the interviewee’s physical presentation.

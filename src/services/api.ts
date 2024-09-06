@@ -1,5 +1,9 @@
 import { Axios } from "./http";
 
+export async function userLogin() {
+  await Axios.get(`/login`);
+}
+
 export async function reset() {
   const res = await Axios.get(`/reset`);
   return res.data;
@@ -28,7 +32,7 @@ export async function addVacancy(jobTitle: string, jobDescription: string) {
     title: jobTitle,
     description: jobDescription,
   });
-  return res.data;
+  return res.data.id;
 }
 
 // interview
