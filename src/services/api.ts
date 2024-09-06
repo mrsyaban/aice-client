@@ -54,7 +54,7 @@ export async function addInterview(question: string, interviewVideo: File) {
   return res.data;
 }
 
-export async function addInterviewById(questionId: string, interviewVideo: Blob) {
+export async function addInterviewById(questionId: string, interviewVideo: File) {
   const formData = new FormData();
   formData.append("id", questionId);
   formData.append("file", interviewVideo);

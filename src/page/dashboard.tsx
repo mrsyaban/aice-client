@@ -34,7 +34,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar isHome={false} />
-      <div className="flex flex-col gap-16 w-full bg-primary-white">
+      <div className="flex flex-col pb-12 gap-16 w-full bg-primary-white">
         {/* features */}
         <div className="flex flex-col h-fit gap-8 items-center pt-12">
           <div className="flex flex-row gap-24">
@@ -66,7 +66,7 @@ const Dashboard = () => {
 
         {/* interview questions analyzed */}
         <div className="flex flex-col h-fit gap-8 items-center w-full max-w-[1000px] mx-auto">
-          <div className="text-3xl font-bold text-primary-blue w-full text-start">Analyzed interview</div>
+          <div className="text-3xl font-bold text-[#a057e9] w-full text-start">Analyzed interview</div>
           {interviews.length === 0 ? (
             <div className="flex w-full py-4 px-6 bg-white rounded-lg text-lg justify-center">You don't have any analyzed interviews yet.</div>
           ) : (
@@ -74,10 +74,10 @@ const Dashboard = () => {
               {interviews.map((interview, idx) => (
                 <div key={idx} className="flex flex-row w-full py-4 px-6 bg-white rounded-lg gap-4 justify-between">
                   <div className="flex flex-col justify-between gap-2">
-                    <div className="text-2xl font-bold text-primary-blue">{interview.question}</div>
-                    <div className="text-lg text-primary-blue pt-12">Generated on {interview.updatedAt}</div>
+                    <div className="text-2xl font-bold text-[#a057e9]">{interview.question}</div>
+                    <div className="text-lg text-[#a057e9] pt-12">Generated on {interview.updatedAt}</div>
                   </div>
-                  <div className="py-4 px-6 bg-primary-blue text-white font-bold w-fit hover:bg-opacity-80 flex items-center h-fit rounded-md justify-center cursor-pointer text-nowrap">{interview.status === InterviewStatus.SUCCESS ? "View Analysis" : "Analyzing..."}</div>
+                  <div onClick={() => navigate(`/interview-analysis-result/${interview.id}`)} className="py-4 px-6 bg-[#a057e9] text-white font-bold w-fit hover:bg-opacity-80 flex items-center h-fit rounded-md justify-center cursor-pointer text-nowrap">{interview.status === InterviewStatus.SUCCESS ? "View Analysis" : "Analyzing..."}</div>
                 </div>
               ))}
             </div>

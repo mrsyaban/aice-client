@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { Camera, Pause, Play, Square, RotateCcw, Send } from "lucide-react";
 import Navbar from "@/components/common/navbar";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { addInterview } from "@/services/api";
+import { addInterview, addInterviewById } from "@/services/api";
 import toast, { Toaster } from "react-hot-toast";
+
 
 const MAX_DURATION = 10 * 60;
 
@@ -27,6 +28,7 @@ const Interview = () => {
   const [searchParams] = useSearchParams();
   const [question, setQuestion] = useState<string>("");
   const navigate = useNavigate();
+  const [questionId, setQuestionId] = useState<string>("");
 
   const submitVideoUpload = () => {
     if (!question) {
@@ -41,7 +43,12 @@ const Interview = () => {
     if (videoUploaded) {
       (async () => {
         try {
-          const message = await addInterview(question, videoUploaded);
+          let message = "";
+          if (!questionId) {
+            message = await addInterview(question, videoUploaded);
+          } else {
+            message = await addInterviewById(questionId, videoUploaded);
+          }
           console.log("Upload successful:", message);
           toast.success(message);
           navigate(0);
@@ -53,8 +60,8 @@ const Interview = () => {
   };
 
   useEffect(() => {
-    const questionTemp = searchParams.get("question") || "";
-    setQuestion(questionTemp);
+    const questionId = searchParams.get("id") || "";
+    setQuestionId(questionId);
     (async () => {
       try {
         const videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -149,7 +156,12 @@ const Interview = () => {
         try {
           const blob = new Blob(recordedChunks.current, { type: "video/mp4" });
           const file = new File([blob], "interview-video.mp4", { type: "video/mp4" });
-          const message = await addInterview(question, file);
+          let message = "";
+          if (!questionId) {
+            message = await addInterview(question, file);
+          } else {
+            message = await addInterviewById(questionId, file);
+          }
           console.log("Upload successful:", message);
           toast.success(message);
           navigate(0);
@@ -289,6 +301,7 @@ const Interview = () => {
             )}
           </div>
         </div>
+        <div className="text-primary-blue font-semibold text-md"> or you can directly upload your interview record</div>
         <div className="flex flex-row gap-4 w-full">
           <div className="flex flex-row w-full">
             <div className="flex flex-row gap-4 justify-between items-center cursor-pointer px-8 py-6 bg-white  border-2 border-primary-blue w-full  rounded-lg text-start">
