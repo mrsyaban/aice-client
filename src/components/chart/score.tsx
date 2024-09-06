@@ -55,7 +55,7 @@ const ScoreChart = ({ label, value, description }: { label: string; value: numbe
         },
       },
     },
-    cutout: "70%",
+    cutout: "60%",
   };
 
   return (

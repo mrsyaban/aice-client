@@ -38,6 +38,9 @@ const InterviewAnalysisResult = () => {
     <>
       <Navbar isHome={false} />
       <div className="flex flex-col py-12 max-w-[1200px] mx-auto gap-12">
+        <div className="text-4xl font-bold text-primary-blue">
+          Interview Analysis Result
+        </div>
         {/* chart */}
         <div className="flex flex-col gap-12">
           <div className="flex flex-row items-cente gap-6 justify-between w-full">
@@ -60,7 +63,7 @@ const InterviewAnalysisResult = () => {
 
         {/* result */}
         <div className="flex flex-col w-full bg-white rounded-lg p-10 px-12 gap-4 h-fit">
-          <h1 className="text-3xl font-bold">Interview Analysis Result</h1>
+          <h1 className="text-3xl font-bold">Analysis summary</h1>
           <div className="font-semibold text-justify text-lg">{result.summary}</div>
           <div className="font-semibold flex flex-col gap-2 text-lg">
             <h1 className="text-2xl font-bold">Improvement</h1>

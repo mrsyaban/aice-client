@@ -301,7 +301,7 @@ const Interview = () => {
             )}
           </div>
         </div>
-        <div className="text-primary-blue font-semibold text-md"> or you can directly upload your interview record</div>
+        <div className="text-primary-blue font-semibold text-md"> or you can directly upload your interview record here</div>
         <div className="flex flex-row gap-4 w-full">
           <div className="flex flex-row w-full">
             <div className="flex flex-row gap-4 justify-between items-center cursor-pointer px-8 py-6 bg-white  border-2 border-primary-blue w-full  rounded-lg text-start">
