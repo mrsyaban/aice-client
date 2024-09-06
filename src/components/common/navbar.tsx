@@ -36,13 +36,6 @@ const Navbar = ({ isHome }: { isHome: boolean }) => {
         </div>
         {isAuthenticated ? (
           <>
-            {/* <div className="flex flex-row gap-10">
-              <div onClick={() => navigate("/")} className="cursor-pointer">
-                CV Analyzer
-              </div>
-              <div>AI Interview grader</div>
-              <div></div>
-            </div> */}
             <div className="flex flex-row items-center gap-4">
               <div className="text-nowrap">Hello, {userInfo?.displayName}</div>
               <div onClick={() => navigate("/dashboard")} className="py-2 px-4 rounded-md bg-primary-blue cursor-pointer hover:bg-opacity-80">Dashboard</div>
@@ -62,7 +55,7 @@ const Navbar = ({ isHome }: { isHome: boolean }) => {
       {isHome && (
         <div className="relative z-0 flex flex-col pt-20 pb-20 w-full items-center gap-6">
           <div className="text-6xl font-bold text-white">Land your dream job now!</div>
-          <div className="no-wrap text-lg text-white">Enter your job posting URL here or paste your job description and pracice interview with our AI now</div>
+          <div className="no-wrap text-lg text-white">Enter your job posting URL here or paste your job description and practice interview with our AI now</div>
           <div onClick={handleStartNow} className="py-5 px-8 mt-4 bg-button-color flex items-center cursor-pointer justify-center text-white rounded-lg font-bold">Start Now</div>
         </div>
       )}

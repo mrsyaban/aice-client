@@ -3,22 +3,15 @@ import Navbar from "@/components/common/navbar";
 import { useState } from "react";
 import { addVacancy } from "@/services/api";
 import { Loader2 } from "lucide-react";
-import FeatureCard from "@/components/card/feature";
-import useAuthStore from "@/store/authStore";
 
-const Home = () => {
+const AIMockInterview = () => {
   const navigate = useNavigate();
   const [jobTitle, setJobTitle] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { isAuthenticated } = useAuthStore();
 
   const handleGenerateQuestions = async () => {
-    if (!isAuthenticated) {
-      navigate("/auth/signin");
-      return;
-    }
     if (!jobTitle || !jobDescription) {
       setErrorMessage("Both job title and job description are required.");
       return;
@@ -36,13 +29,10 @@ const Home = () => {
     }
   };
 
-  const handleAnalyzeCV = () => {
-    navigate("/cv-analyzer?jobTitle=" + jobTitle + "&jobDescription=" + jobDescription);
-  };
 
   return (
     <div className="h-screen w-full bg-primary-white">
-      <Navbar isHome={true} />
+      <Navbar isHome={false} />
       <div className="flex flex-col gap-16 items-center h-fit pt-12">
         <div className="flex flex-col h-fit gap-8 items-center">
           <div className="text-4xl font-bold text-primary-blue">Paste your job posting here!</div>
@@ -69,17 +59,6 @@ const Home = () => {
                 "Get interview questions"
               )}
             </button>
-            <div onClick={handleAnalyzeCV} className="py-5 px-8 hover:opacity-90 cursor-pointer bg-button-color flex items-center justify-center text-white rounded-lg font-bold">
-              Analyze my resume
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col h-fit gap-8 items-center pb-12">
-          <div className="text-3xl font-bold text-primary-blue">Try out our features here!</div>
-          <div className="flex flex-row gap-24 h-full">
-            <FeatureCard title="AI mock Interview" description="Provide your job details and get targeted practice questions designed to help you tackle any interview challenge confidently." path="interview" command="Get interview questions" />
-            <FeatureCard title="AI Grader" description="Simulate real interviews on our site and get in-depth feedback to perfect your performance." path="mock-interview" command="Grade my interview" />
-            <FeatureCard title="CV Analyzer" description="Stop using the same CV for every job! Our AI analyze your CV to make it relevance with each job vacancy" path="cv-analyzer" command="Analyze my CV" />
           </div>
         </div>
       </div>
@@ -87,4 +66,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default AIMockInterview;
