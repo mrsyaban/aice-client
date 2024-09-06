@@ -21,36 +21,9 @@ const Interview = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
 
-  const [videoUploaded, setVideoUploaded] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string>("");
-
   const [searchParams] = useSearchParams();
   const [question, setQuestion] = useState<string>("");
   const navigate = useNavigate();
-
-  const submitVideoUpload = () => {
-    if (!question) {
-      toast.error("Please provide a question before uploading the video.");
-      return;
-    }
-    if (!videoUploaded) {
-      toast.error("Please select a video to upload.");
-      return;
-    }
-
-    if (videoUploaded) {
-      (async () => {
-        try {
-          const message = await addInterview(question, videoUploaded);
-          console.log("Upload successful:", message);
-          toast.success(message);
-          navigate(0);
-        } catch (error) {
-          console.error("Upload failed:", error);
-        }
-      })();
-    }
-  };
 
   useEffect(() => {
     const questionTemp = searchParams.get("question") || "";
@@ -145,18 +118,18 @@ const Interview = () => {
 
   const submitVideo = () => {
     if (question)
-      (async () => {
-        try {
-          const blob = new Blob(recordedChunks.current, { type: "video/mp4" });
-          const file = new File([blob], "interview-video.mp4", { type: "video/mp4" });
-          const message = await addInterview(question, file);
-          console.log("Upload successful:", message);
-          toast.success(message);
-          navigate(0);
-        } catch (error) {
-          console.error("Upload failed:", error);
-        }
-      })();
+    (async () => {
+      try {
+        const blob = new Blob(recordedChunks.current, { type: "video/mp4" });
+        const file = new File([blob], "interview-video.mp4", { type: "video/mp4" });
+        const message = await addInterview(question, file);
+        console.log("Upload successful:", message);
+        toast.success(message);
+        navigate(0);
+      } catch (error) {
+        console.error("Upload failed:", error);
+      }
+    })();
   };
 
   const startTimer = () => {
@@ -228,16 +201,10 @@ const Interview = () => {
 
   return (
     <>
-      <Toaster />
+     <Toaster/>
       <Navbar isHome={false} />
       <div className="flex flex-col px-[15%] 2xl:px-[25%] py-12 gap-8 items-center">
-        <div className="text-3xl font-bold text-primary-blue">Interview Grader</div>
-        <textarea
-          placeholder="Put your interview question here"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="flex h-fit w-full items-center text-primary-blue px-4 font-semibold text-2xl bg-white border-2 border-primary-blue py-4 rounded-lg"
-        />
+        <textarea placeholder="Put your interview question here" value={question} onChange={(e) => setQuestion(e.target.value)} className="flex h-fit w-full items-center text-primary-blue px-4 font-semibold text-2xl bg-white border-2 border-primary-blue py-4 rounded-lg" />
         <div className="w-full max-w-3xl bg-white rounded-lg shadow-md overflow-hidden">
           <div className="relative">
             <video ref={videoRef} className="w-full h-auto" autoPlay playsInline muted={isRecording || !recordedVideoUrl} />
@@ -288,32 +255,6 @@ const Interview = () => {
               </div>
             )}
           </div>
-        </div>
-        <div className="flex flex-row gap-4 w-full">
-          <div className="flex flex-row w-full">
-            <div className="flex flex-row gap-4 justify-between items-center cursor-pointer px-8 py-6 bg-white  border-2 border-primary-blue w-full  rounded-lg text-start">
-              <div className="font-semibold text-primary-blue text-xl text-ellipsis">{fileName ? fileName : "Upload your interview video (mp4)"}</div>
-              <label htmlFor="videoUploader" className="flex items-center justify-center cursor-pointer py-4 px-6 bg-primary-blue text-white font-bold rounded-lg">
-                Upload
-              </label>
-            </div>
-            <input
-              id="videoUploder"
-              type="file"
-              accept="*.mp4"
-              onChange={(e) => {
-                const fileTemp = e.target.files?.[0] || null;
-                if (!fileTemp) return;
-                setFileName(fileTemp.name);
-                setVideoUploaded(fileTemp);
-              }}
-              className="hidden"
-            />
-          </div>
-          <button onClick={submitVideoUpload} className="bg-button-color text-white rounded-lg p-2 flex items-center">
-            <Send size={20} />
-            <span className="ml-2 font-bold">Analyze</span>
-          </button>
         </div>
       </div>
     </>

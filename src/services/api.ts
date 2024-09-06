@@ -46,13 +46,23 @@ export async function getInterviewById(interviewId: string) {
   return res.data;
 }
 
-export async function addInterview(question: string, interviewVideo: Blob) {
+export async function addInterview(question: string, interviewVideo: File) {
   const formData = new FormData();
   formData.append("question", question);
   formData.append("file", interviewVideo);
   const res = await Axios.post(`/question`, formData);
   return res.data;
 }
+
+export async function addInterviewById(questionId: string, interviewVideo: Blob) {
+  const formData = new FormData();
+  formData.append("id", questionId);
+  formData.append("file", interviewVideo);
+  const res = await Axios.post(`/answer-question`, formData);
+  return res.data;
+}
+
+
 
 export async function getInterviewResult(vacancyId: string | undefined) {
   if (!vacancyId) return [];
