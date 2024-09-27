@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/common/navbar";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { addVacancy } from "@/services/api";
 import { Loader2 } from "lucide-react";
 import FeatureCard from "@/components/card/feature";
@@ -40,6 +40,27 @@ const Home = () => {
     navigate("/cv-analyzer?jobTitle=" + jobTitle + "&jobDescription=" + jobDescription);
   };
 
+  const textareaRef = useRef(null);
+
+  // Auto-expand the textarea as the content changes
+  const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setJobDescription(e.target.value);
+    autoResizeTextarea(e.target);
+  };
+
+  // Auto-resize function
+  const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+
+  // Effect to auto-resize on initial render or content paste
+  useEffect(() => {
+    if (textareaRef.current) {
+      autoResizeTextarea(textareaRef.current);
+    }
+  }, [jobDescription]);
+
   return (
     <div className="h-screen w-full bg-primary-white">
       <Navbar isHome={true} />
@@ -53,8 +74,10 @@ const Home = () => {
             placeholder="Job Title"
           />
           <textarea
-            onChange={(e) => setJobDescription(e.target.value)}
-            className="w-[640px] border-primary-blue border-1 border rounded-md py-4 px-4 text-primary-blue text-lg font-normal placeholder:text-opacity-50 placeholder:text-primary-blue"
+            ref={textareaRef}
+            value={jobDescription}
+            onChange={handleTextareaChange}
+            className="w-[640px] max-h-96 border border-primary-blue rounded-md py-4 px-4 text-primary-blue text-lg font-normal placeholder:text-opacity-50 placeholder:text-primary-blue whitespace-pre-wrap overflow-auto resize-none"
             placeholder="Job Description"
           />
           {errorMessage && <div className="text-red-700 font-semibold">{errorMessage}</div>}
@@ -77,7 +100,12 @@ const Home = () => {
         <div className="flex flex-col h-fit gap-8 items-center pb-12">
           <div className="text-3xl font-bold text-primary-blue">Try out our features here!</div>
           <div className="flex flex-row gap-24 h-full">
-            <FeatureCard title="AI mock Interview" description="Provide your job details and get targeted practice questions designed to help you tackle any interview challenge confidently." path="mock-interview" command="Get interview questions" />
+            <FeatureCard
+              title="AI mock Interview"
+              description="Provide your job details and get targeted practice questions designed to help you tackle any interview challenge confidently."
+              path="mock-interview"
+              command="Get interview questions"
+            />
             <FeatureCard title="AI Grader" description="Simulate real interviews on our site and get in-depth feedback to perfect your performance." path="interview" command="Grade my interview" />
             <FeatureCard title="CV Analyzer" description="Stop using the same CV for every job! Our AI analyze your CV to make it relevance with each job vacancy" path="cv-analyzer" command="Analyze my CV" />
           </div>
