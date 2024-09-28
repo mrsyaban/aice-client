@@ -7,6 +7,9 @@ import { AnalysisResult } from "@/types/analysis-result";
 import { Emotion } from "@/types/emotion";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+// import ReactPlayer from "react-player";
+// import Vid from "@/assets/placeholder/halo.mp4";
+
 
 const InterviewAnalysisResult = () => {
   const [result, setResult] = useState<AnalysisResult>();
@@ -32,14 +35,25 @@ const InterviewAnalysisResult = () => {
   // If the result hasn't been fetched yet, return null or a loading spinner
   if (!result) return null;
 
-  const totalVideoLength = Math.floor(result.body.length/4)
+  const totalVideoLength = Math.floor(result.body.length / 4);
 
   return (
     <>
       <Navbar isHome={false} />
       <div className="flex flex-col py-12 max-w-[1200px] mx-auto gap-12">
-        <div className="text-4xl font-bold text-primary-blue">
-          Interview Analysis Result
+        <div className="text-4xl font-bold text-primary-blue">Interview Analysis Result</div>
+        {/* Preview */}
+        <div className="flex flex-row w-full justify-center">
+
+        {/* <ReactPlayer
+            url={Vid}
+            playing={true}
+            controls={true}
+            // loop={true}
+            // muted={true}
+            // playsinline={true}
+            // onReady={onLoadedData}
+          /> */}
         </div>
         {/* chart */}
         <div className="flex flex-col gap-12">
@@ -54,10 +68,18 @@ const InterviewAnalysisResult = () => {
             </div>
           </div>
           <div className="flex flex-row justify-center h-fit gap-24 w-[80%] mx-auto">
-            <ScoreChart label="Relevance" value={result.relevance} description="indicating how relevant your answers were to the position you are applying for. A higher score means your answers were more pertinent to the job requirements."/>
-            <ScoreChart label="Clarity" value={result.clarity} description="representing how clear and understandable your answers were. This measures how well you communicate your points"/>
-            <ScoreChart label="Originality" value={result.originality} description="reflecting the uniqueness of your answer. This assesses how much your answers differed from standard or expected responses."/>
-            <ScoreChart label="Engagement" value={result.engagement} description="score that combines body language and emotional expression to evaluate how engaging you were. It reflects your overall presence and interaction during the interview."/>
+            <ScoreChart
+              label="Relevance"
+              value={result.relevance}
+              description="indicating how relevant your answers were to the position you are applying for. A higher score means your answers were more pertinent to the job requirements."
+            />
+            <ScoreChart label="Clarity" value={result.clarity} description="representing how clear and understandable your answers were. This measures how well you communicate your points" />
+            <ScoreChart label="Originality" value={result.originality} description="reflecting the uniqueness of your answer. This assesses how much your answers differed from standard or expected responses." />
+            <ScoreChart
+              label="Engagement"
+              value={result.engagement}
+              description="score that combines body language and emotional expression to evaluate how engaging you were. It reflects your overall presence and interaction during the interview."
+            />
           </div>
         </div>
 
@@ -70,7 +92,7 @@ const InterviewAnalysisResult = () => {
             <div className="flex flex-col gap-4 list-outside">
               {result.improvement.map((item, index) => (
                 <div key={index} className="flex flex-row gap-1">
-                  <li/>
+                  <li />
                   <div>{item}</div>
                 </div>
               ))}

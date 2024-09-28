@@ -3,7 +3,7 @@ export interface Interview {
   question: string;
   video: string;
   status: InterviewStatus;
-  created_at?: string;
+  created_at: Date;
   updatedAt?: string;
 }
 

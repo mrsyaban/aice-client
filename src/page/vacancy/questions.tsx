@@ -33,7 +33,7 @@ const Questions = () => {
     <div>
       <Navbar isHome={false} />
       <div className="h-full flex flex-col gap-8 py-8 max-w-[1200px] xl:mx-auto mx-12">
-        <div className="font-bold text-4xl text-center pt-10 text-primary-blue">Possible interview questions</div>
+        <div className="font-bold text-5xl text-center pt-10 text-primary-blue">Possible interview questions</div>
         <div className="flex w-full text-white font-bold text-3xl bg-primary-blue py-8 justify-center rounded-lg">{vacancyInfo?.title}</div>
         <div className="flex flex-col gap-10 items-center h-fit ">
           {questions.map((question, index) => (

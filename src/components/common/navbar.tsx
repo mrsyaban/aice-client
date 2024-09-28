@@ -38,7 +38,7 @@ const Navbar = ({ isHome }: { isHome: boolean }) => {
           <>
             <div className="flex flex-row items-center gap-4">
               <div className="text-nowrap">Hello, {userInfo?.displayName}</div>
-              <div onClick={() => navigate("/dashboard")} className="py-2 px-4 rounded-md bg-primary-blue cursor-pointer hover:bg-opacity-80">Dashboard</div>
+              <div onClick={() => navigate("/dashboard")} className="py-2 px-4 rounded-md bg-primary-purple cursor-pointer font-semibold hover:bg-opacity-80">Dashboard</div>
             </div>
           </>
         ) : (

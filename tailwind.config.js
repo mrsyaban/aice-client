@@ -20,6 +20,7 @@ export default {
         primary: {
           white: '#EBF7FF',
           blue: '#14358A',
+          purple: '#773dfc',
         },
       },
     },

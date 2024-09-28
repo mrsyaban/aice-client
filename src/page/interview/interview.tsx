@@ -301,7 +301,7 @@ const Interview = () => {
                     {isLoading ? (
                       <div className="flex flex-row w-full justify-center items-center gap-2">
                         <Loader2 className="animate-spin" />
-                        Loading...
+                        Sending your interview...
                       </div>
                     ) : (
                       <>
@@ -351,7 +351,7 @@ const Interview = () => {
             {isLoading2 ? (
               <div className="flex flex-row w-full justify-center items-center gap-2">
                 <Loader2 className="animate-spin" />
-                Loading...
+                Sending your interview...
               </div>
             ) : (
               <>
