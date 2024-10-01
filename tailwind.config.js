@@ -21,7 +21,14 @@ export default {
           white: '#EBF7FF',
           blue: '#14358A',
           purple: '#773dfc',
+          cream: '#f0f0f0',
+          yellow: '#B4491B',
         },
+        secondary: {
+          purple: '#9B2ECD',
+          purpleLight: '#F8EAFF',
+          yellow: '#FCE9E1'
+        }
       },
     },
   },
