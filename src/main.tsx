@@ -23,6 +23,7 @@ import InterviewAnalysisResult from './page/interview/analysisResult'
 import Dashboard from './page/dashboard'
 import CVAnalyzer from './page/cv/cvAnalyzer'
 import AIMockInterview from './page/vacancy/mock-interview'
+import ResumeResult from './page/cv/resume-result'
 
 
 const router = createBrowserRouter([
@@ -66,7 +67,16 @@ const router = createBrowserRouter([
       },
       {
         path: "cv-analyzer",
-        element: <CVAnalyzer />
+        children: [
+          {
+            path: "",
+            element: <CVAnalyzer />
+          },
+          {
+            path: "result",
+            element: <ResumeResult/>
+          }
+        ]
       },
       {
         path: "mock-interview",

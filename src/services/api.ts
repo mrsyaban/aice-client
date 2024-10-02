@@ -27,10 +27,11 @@ export async function getQuestionsByVacancy(vacancyId: string | undefined) {
   return res.data.questions;
 }
 
-export async function addVacancy(jobTitle: string, jobDescription: string) {
+export async function addVacancy(jobTitle: string, jobDescription: string, jobIndustry: string) {
   const res = await Axios.post(`/vacancy`, {
     title: jobTitle,
     description: jobDescription,
+    industry: jobIndustry,
   });
   return res.data.id;
 }
@@ -62,11 +63,17 @@ export async function addInterviewById(questionId: string, interviewVideo: File)
   return res.data.message;
 }
 
-
-
 export async function getInterviewResult(vacancyId: string | undefined) {
   if (!vacancyId) return [];
   const res = await Axios.get(`/question-result/${vacancyId}`);
+  return res.data;
+}
+
+export async function getInterviewVideo(questionId: string | undefined) {
+  if (!questionId) return [];
+  const res = await Axios.get(`/stream/${questionId}`,{}, {
+    responseType: "blob",
+  });
   return res.data;
 }
 

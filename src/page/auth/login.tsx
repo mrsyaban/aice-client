@@ -10,6 +10,7 @@ const Login = () => {
   return (
     <div className="h-screen bg-primary-white">
       <Navbar isHome={false} />
+      <div className="h-[74px]"/>
       <div className="flex flex-row w-screen justify-center items-center h-fit pt-32">
         <div className="flex flex-col w-fit items-center gap-10">
           <h1 className="text-3xl font-semibold">Sign in / Sign up</h1>

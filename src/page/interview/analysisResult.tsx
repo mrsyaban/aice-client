@@ -1,63 +1,83 @@
-import EmotionChart from "@/components/chart/emotions";
+// import EmotionChart from "@/components/chart/emotions";
+// import AggregatedLineChart from "@/components/chart/voice";
+// import { Emotion } from "@/types/emotion";
 import ScoreChart from "@/components/chart/score";
-import AggregatedLineChart from "@/components/chart/voice";
 import Navbar from "@/components/common/navbar";
-import { getInterviewResult } from "@/services/api";
+import { getInterviewResult, getInterviewVideo } from "@/services/api";
 import { AnalysisResult } from "@/types/analysis-result";
-import { Emotion } from "@/types/emotion";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import ReactPlayer from "react-player";
+import ReactPlayer from "react-player";
 // import Vid from "@/assets/placeholder/halo.mp4";
 
 
 const InterviewAnalysisResult = () => {
   const [result, setResult] = useState<AnalysisResult>();
+  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       try {
+        const tempVideo = await getInterviewVideo(id);
+        const tempVideoUrl = URL.createObjectURL(tempVideo);
+        
+        if (tempVideoUrl) {
+          setVideoUrl(tempVideoUrl);
+        }
         const temp = await getInterviewResult(id);
-        if (!temp) {
-          navigate("/404"); // Redirect to a 404 page if the result is not found
-        } else {
+        if (temp) {
           setResult(temp);
         }
       } catch (error) {
         console.error(error);
         navigate("/404"); // Redirect to a 404 page if an error occurs
+      } finally {
+        setLoading(false);
       }
     })();
-  }, [id, navigate]);
+    return () => {
+      if (videoUrl) {
+        URL.revokeObjectURL(videoUrl);
+      }
+    };
+  }, [id, navigate, videoUrl]);
 
   // If the result hasn't been fetched yet, return null or a loading spinner
   if (!result) return null;
 
-  const totalVideoLength = Math.floor(result.body.length / 4);
+  // const totalVideoLength = Math.floor(result.body.length / 4);
 
   return (
     <>
       <Navbar isHome={false} />
-      <div className="flex flex-col py-12 max-w-[1200px] mx-auto gap-12">
+      <div className="h-[74px]"/>
+      <div className="flex flex-col py-12 px-24 gap-12">
         <div className="text-4xl font-bold text-primary-blue">Interview Analysis Result</div>
         {/* Preview */}
         <div className="flex flex-row w-full justify-center">
+      {loading ? ( // Show loading placeholder while fetching
+        <div className="flex bg-primary-white w-96 h-48 justify-center items-center">
+          <p>Loading video...</p>
+        </div>
+      ) : (
+        videoUrl && (
+          <ReactPlayer
+          className="rounded-lg"
+          url={videoUrl}
+          playing={true}
+          controls={true}
+          />
+        )
+      )}
 
-        {/* <ReactPlayer
-            url={Vid}
-            playing={true}
-            controls={true}
-            // loop={true}
-            // muted={true}
-            // playsinline={true}
-            // onReady={onLoadedData}
-          /> */}
         </div>
         {/* chart */}
         <div className="flex flex-col gap-12">
-          <div className="flex flex-row items-cente gap-6 justify-between w-full">
+          {/* <div className="flex flex-row items-cente gap-6 justify-between w-full">
             <div className="flex flex-col w-full items-center bg-white p-6 rounded-lg">
               <h1 className="text-2xl font-bold mb-4">Engagement Over Time</h1>
               <AggregatedLineChart data={result.voice} data2={result.body} totalVideoLength={totalVideoLength} interval={2} />
@@ -66,7 +86,7 @@ const InterviewAnalysisResult = () => {
               <h1 className="text-2xl font-bold mb-4">Emotion Intensity Over Time</h1>
               <EmotionChart data={result.emotion as Emotion} />
             </div>
-          </div>
+          </div> */}
           <div className="flex flex-row justify-center h-fit gap-24 w-[80%] mx-auto">
             <ScoreChart
               label="Relevance"
@@ -84,7 +104,7 @@ const InterviewAnalysisResult = () => {
         </div>
 
         {/* result */}
-        <div className="flex flex-col w-full bg-white rounded-lg p-10 px-12 gap-4 h-fit">
+        <div className="flex flex-col w-full bg-white rounded-lg max-w-[1200px] p-10 px-12 gap-4 h-fit">
           <h1 className="text-3xl font-bold">Analysis summary</h1>
           <div className="font-semibold text-justify text-lg">{result.summary}</div>
           <div className="font-semibold flex flex-col gap-2 text-lg">
