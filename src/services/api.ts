@@ -1,4 +1,6 @@
+import { emotionGroups } from "@/types/emotion";
 import { Axios } from "./http";
+import { PhraseAnalysis } from "@/types/analysis-result";
 
 export async function userLogin() {
   await Axios.get(`/login`);
@@ -44,6 +46,7 @@ export async function getInterviews() {
 
 export async function getInterviewById(interviewId: string) {
   const res = await Axios.get(`/question/${interviewId}`);
+  
   return res.data;
 }
 
@@ -66,7 +69,28 @@ export async function addInterviewById(questionId: string, interviewVideo: File)
 export async function getInterviewResult(vacancyId: string | undefined) {
   if (!vacancyId) return [];
   const res = await Axios.get(`/question-result/${vacancyId}`);
-  return res.data;
+  
+  function isSameEmotionGroup(emotion: string, actual_emotion: string): boolean {
+    const isInGroup1 = emotionGroups.group1.includes(emotion) && emotionGroups.group1.includes(actual_emotion);
+    const isInGroup2 = emotionGroups.group2.includes(emotion) && emotionGroups.group2.includes(actual_emotion);
+    return isInGroup1 || isInGroup2;
+  }
+  
+  function approvePhrase(phraseData: PhraseAnalysis): PhraseAnalysis {
+    const gestureApproved = phraseData.gesture === phraseData.actual_gesture;
+    const emotionApproved = isSameEmotionGroup(phraseData.emotion, phraseData.actual_emotion);
+    
+    return {
+      ...phraseData,
+      approved: gestureApproved && emotionApproved,
+    };
+  }
+
+  const result = res.data.result;
+  return {
+    ...res.data,
+    result: result.map(approvePhrase),
+  };
 }
 
 export async function getInterviewVideo(questionId: string | undefined) {

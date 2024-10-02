@@ -7,3 +7,8 @@ export interface Emotion {
   sad: number;
   surprise: number;
 }
+
+export const emotionGroups = {
+  group1: ['happy', 'neutral', 'surprised'],
+  group2: ['sad', 'disgust', 'angry', 'fear'],
+};
