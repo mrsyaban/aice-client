@@ -3,18 +3,15 @@
 // import { Emotion } from "@/types/emotion";
 import ScoreChart from "@/components/chart/score";
 import Navbar from "@/components/common/navbar";
-import { getInterviewResult, getInterviewVideo } from "@/services/api";
+import { getInterviewResult} from "@/services/api";
 import { AnalysisResult } from "@/types/analysis-result";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ReactPlayer from "react-player";
 // import Vid from "@/assets/placeholder/halo.mp4";
-
 
 const InterviewAnalysisResult = () => {
   const [result, setResult] = useState<AnalysisResult>();
-  const [videoUrl, setVideoUrl] = useState<string>("");
-  const [loading, setLoading] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,29 +19,19 @@ const InterviewAnalysisResult = () => {
   useEffect(() => {
     (async () => {
       try {
-        const tempVideo = await getInterviewVideo(id);
-        const tempVideoUrl = URL.createObjectURL(tempVideo);
-        
-        if (tempVideoUrl) {
-          setVideoUrl(tempVideoUrl);
+        if (videoRef.current) {
+          videoRef.current.load();
         }
+
         const temp = await getInterviewResult(id);
         if (temp) {
           setResult(temp);
         }
       } catch (error) {
         console.error(error);
-        navigate("/404"); // Redirect to a 404 page if an error occurs
-      } finally {
-        setLoading(false);
       }
     })();
-    return () => {
-      if (videoUrl) {
-        URL.revokeObjectURL(videoUrl);
-      }
-    };
-  }, [id, navigate, videoUrl]);
+  }, [id, navigate]);
 
   // If the result hasn't been fetched yet, return null or a loading spinner
   if (!result) return null;
@@ -54,26 +41,15 @@ const InterviewAnalysisResult = () => {
   return (
     <>
       <Navbar isHome={false} />
-      <div className="h-[74px]"/>
+      <div className="h-[74px]" />
       <div className="flex flex-col py-12 px-24 gap-12">
         <div className="text-4xl font-bold text-primary-blue">Interview Analysis Result</div>
         {/* Preview */}
         <div className="flex flex-row w-full justify-center">
-      {loading ? ( // Show loading placeholder while fetching
-        <div className="flex bg-primary-white w-96 h-48 justify-center items-center">
-          <p>Loading video...</p>
-        </div>
-      ) : (
-        videoUrl && (
-          <ReactPlayer
-          className="rounded-lg"
-          url={videoUrl}
-          playing={true}
-          controls={true}
-          />
-        )
-      )}
-
+          <video ref={videoRef} controls autoPlay playsInline className="w-full max-w-3xl mx-auto">
+            <source src={`${import.meta.env.VITE_API_URL}/stream/${id}`} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
         {/* chart */}
         <div className="flex flex-col gap-12">
