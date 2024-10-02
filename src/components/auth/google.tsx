@@ -53,7 +53,7 @@ const GoogleAuthButton = () => {
     },
   });
   return (
-    <button onClick={() => login()} className="flex flex-row items-center w-full border-2 gap-3 rounded-md px-5 py-3 cursor-pointer justify-center font-semibold text-lg">
+    <button onClick={() => login()} className="flex flex-row hover:bg-slate-500 hover:bg-opacity-40 items-center w-full border-2 gap-3 rounded-md px-5 py-3 cursor-pointer justify-center font-semibold text-lg">
       <FcGoogle className="w-8 h-8" /> Continue with google
     </button>
   );
