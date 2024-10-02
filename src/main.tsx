@@ -22,7 +22,6 @@ import Interview from './page/interview/interview'
 import InterviewAnalysisResult from './page/interview/analysisResult'
 import Dashboard from './page/dashboard'
 import CVAnalyzer from './page/cv/cvAnalyzer'
-import AIMockInterview from './page/vacancy/mock-interview'
 import ResumeResult from './page/cv/resume-result'
 
 
@@ -77,10 +76,6 @@ const router = createBrowserRouter([
             element: <ResumeResult/>
           }
         ]
-      },
-      {
-        path: "mock-interview",
-        element: <AIMockInterview />
       },
       {
         path: "*",
