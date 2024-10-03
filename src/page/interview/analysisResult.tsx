@@ -109,7 +109,7 @@ const InterviewAnalysisResult = () => {
               <div
                 key={index}
                 ref={(el) => (cardRefs.current[index] = el)}
-                className={`flex flex-row gap-8 cursor-pointer rounded-lg ${!item.approved ? "bg-[#eacccc] text-[#600303] " : "bg-white"} ${index === currentCardIndex ? "outline outline-4 outline-secondary-purple text-white bg-secondary-purple" : ""}`}
+                className={`flex flex-row gap-8 cursor-pointer rounded-lg ${index === currentCardIndex ? "outline outline-4 outline-secondary-purple text-white bg-secondary-purple" : !item.approved ? "bg-[#eacccc] text-[#600303] " : "bg-white"}`}
                 onClick={() => goToTime(item.start_time)}
               >
                 <div className={`flex flex-row gap-8 w-[60%] p-6 rounded-lg`}>
