@@ -7,6 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UploadVideo from "@/components/interview/upload-video/upload-video";
 import VideoRecorder from "@/components/interview/upload-video/record-video";
 
+import MicIcon from "@/assets/icons/mic.svg";
+import SilentIcon from "@/assets/icons/silent.svg";
+import LampIcon from "@/assets/icons/lamp.svg";
+
+
 const Interview = () => {
   const [searchParams] = useSearchParams();
   const [question, setQuestion] = useState<string>("");
@@ -49,12 +54,31 @@ const Interview = () => {
             }}
             className="flex h-fit w-full items-center text-primary-blue resize-none focus:outline-none font-semibold text-3xl bg-transparent rounded-lg"
           />
-          <Tabs defaultValue="record" className="w-full bg-transparent rounded-lg bg-white">
+          <div className="flex flex-col gap-2 text-primary-blue w-full p-4 py-4 border-2 border-opacity-45 border-primary-blue rounded-lg bg-primary-blue bg-opacity-15">
+            <span className="font-bold">Before we can analyze your recorded answers, please ensure these conditions are met as we are going to grade your answer based on the following components:</span>
+            <div className="flex flex-col gap-4 pt-2">
+              <div className="flex flex-row gap-2 items-center">
+                <img src={MicIcon} alt="mic" className="w-6 h-6" /> 
+                <span className="font-bold">Content of your answer. </span>Make sure you are speaking clearly into the microphone.
+              </div>
+              <div className="flex flex-row gap-2 items-center">
+                <img src={SilentIcon} alt="silent" className="w-6 h-6" />
+                <span className="font-bold">Voice clarity. </span>
+                Avoid background noise and crowded places.
+              </div>
+              <div className="flex flex-row gap-2 items-center">
+                <img src={LampIcon} alt="lamp" className="w-6 h-6" />
+                <span className="font-bold">Body language and movement. </span>
+                Record your answers in a well-lit room as we are going to analyze your expressions and non-verbal movements as well.
+              </div>
+            </div>
+          </div>
+          <Tabs defaultValue="record" className="w-full mt-6 bg-transparent rounded-lg bg-white">
             <TabsList className="grid w-full grid-cols-2 bg-transparent border bg-gray-600 rounded-b-none border-black h-fit">
-              <TabsTrigger value="record" className="text-2xl font-bold">
+              <TabsTrigger value="record" className="text-2xl font-bold text-white">
                 Record
               </TabsTrigger>
-              <TabsTrigger value="upload" className="text-2xl font-bold">
+              <TabsTrigger value="upload" className="text-2xl font-bold text-white">
                 Upload
               </TabsTrigger>
             </TabsList>

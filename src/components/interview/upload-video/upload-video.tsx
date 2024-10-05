@@ -39,6 +39,11 @@ const UploadVideo: React.FC<UploadVideoProps> = ({ question, questionId }) => {
       toast.error("Please select a video to upload.");
       return;
     }
+    
+    if (videoFile.size > 10000000) {
+      toast.error("Video file size should be less than 10MB.");
+      return;
+    }
 
     setIsLoading(true);
     try {

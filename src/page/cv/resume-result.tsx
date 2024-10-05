@@ -3,12 +3,19 @@ import Navbar from "@/components/common/navbar";
 import { CvResult } from "@/types/cv-result";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import CheckIcon from "@/assets/icons/check-icon.svg";
+import CrossIcon from "@/assets/icons/cross-icon.svg";
 
 const ResumeResult = () => {
   const [jobTitle, setJobTitle] = useState<string>("");
   const [jobDescription, setJobDescription] = useState<string>("");
   const [result, setResult] = useState<CvResult | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const resultTemp = localStorage.getItem("resume-result");
@@ -27,7 +34,7 @@ const ResumeResult = () => {
     <>
       <Toaster />
       <Navbar isHome={false} />
-      <div className="h-[74px]"/>
+      <div className="h-[74px]" />
       <div className="font-bold text-4xl text-center py-12 bg-primary-white text-primary-blue">Resume Analysis Result</div>
       <div className="flex px-24">
         <div className="flex flex-row w-full px-12 gap-24 py-12">
@@ -42,13 +49,38 @@ const ResumeResult = () => {
                 </button>
               )}
             </div>
-            <div className="flex flex-row w-full bg-button-color justify-center font-bold text-white text-2xl py-4 px-6 rounded-lg cursor-pointer hover:scale-105">Analyze another resume</div>
+            <div onClick={() => navigate("/cv-analyzer")} className="flex flex-row w-full bg-button-color justify-center font-bold text-white text-2xl py-4 px-6 rounded-lg cursor-pointer hover:scale-105">
+              Analyze another job
+            </div>
           </div>
           {/* result */}
           {result && (
             <div className="flex flex-col gap-6 w-[65%]">
               {/* <div className="font-bold text-4xl text-left text-primary-blue">Analysis</div> */}
-              <ScoreBarChart value={result.RelevanceScore} label="Relevance Score" desc="How well your resume aligns with the job requirements" />
+              <ScoreBarChart value={result.relevanceScore} label="Job fitness Score" desc="How well your resume fit with the job requirements" />
+              <Table className="border-4 border-white rounded-lg text-primary-purpleLight text-md">
+                <TableBody>
+                  {result.judgements.map((judgement, index) => (
+                    <TableRow key={index} className="border-b-4 border-white">
+                      <TableCell className="font-medium pl-4">{judgement.requirement}</TableCell>
+                      <TableCell className="text-right pr-8">
+                        {judgement.isFit 
+                          ? <img src={CheckIcon} alt="fit" className="h-6 w-6" /> 
+                          : <img src={CrossIcon} alt="not-fit" className="h-6 w-6"/>
+                        }
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              {result.relevanceScore < 80 && (
+                <div className="text-lg font-semibold text-[#c0322a]">
+                  Your resume is not fit with the job requirements. Please consider improving your resume instead of start practicing interview.
+                </div>
+              )}
+              <div className="self-start bg-primary-blue text-white text-lg py-2 px-4 rounded-lg font-semibold">
+                Generate interview questions
+              </div>
               <ScoreBarChart value={result.quantifiedScore} label="Quantification Score" desc="How much quantification that justifies your achievements" />
               <div className="flex flex-row gap-6">
                 <div className="flex flex-col rounded-lg gap-2 w-[50%] bg-white p-4">
@@ -73,13 +105,13 @@ const ResumeResult = () => {
                 </div>
               </div>
               <div className="flex flex-col w-full bg-white rounded-lg p-10 px-12 gap-4 h-fit">
-                <h1 className="text-3xl font-bold">Summary of Analysis</h1>
-                <div className="font-semibold text-justify text-lg">{result.summary}</div>
+                <h1 className="text-3xl font-bold">Summary of analysis</h1>
+                <div className="font-normal text-justify text-lg">{result.summary}</div>
                 <div className="font-semibold flex flex-col gap-2 text-lg">
-                  <h1 className="text-2xl font-bold">Improvement</h1>
-                  <div className="flex flex-col gap-4 list-outside">
+                  <h1 className="text-3xl font-bold">Improvement recommendation</h1>
+                  <div className="flex flex-col gap-4 list-outside ">
                     {result.improvement.map((item: string, index: number) => (
-                      <div key={index} className="flex flex-row gap-1">
+                      <div key={index} className="flex flex-row gap-1 font-normal">
                         <li />
                         <div>{item}</div>
                       </div>

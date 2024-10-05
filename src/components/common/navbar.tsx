@@ -34,14 +34,20 @@ const Navbar = ({ isHome }: { isHome: boolean }) => {
         )}
       </div>
       <div className="relative z-10 flex flex-row items-center text-white py-5 px-64 gap-12 justify-between">
-        <div onClick={() => navigate("/")} className="text-3xl font-semibold cursor-pointer">
+        <div onClick={() => navigate("/")} className="flex flex-row gap-4 items-center text-3xl font-semibold cursor-pointer">
+          <img src="/icon.svg" alt="logo" className="h-10 w-10" />
           AICe
         </div>
         {isAuthenticated ? (
           <>
-            <div className="flex flex-row items-center gap-4">
-            <img src={ProfileIcon} alt="profile" className="h-8 w-8" />
-              <div onClick={() => navigate("/dashboard")} className="text-nowrap text-xl cursor-pointer hover:underline-offset-4 hover:underline">{userInfo?.displayName}</div>
+            <div onClick={() => navigate("/dashboard")} className="flex flex-row items-center gap-4 cursor-pointer">
+              <div className="flex flex-row items-center gap-2 text-xl">
+                {/* <img src={ProfileIcon} alt="profile" className="h-8 w-8" /> */}
+                <div className="text-nowrap cursor-pointer hover:underline-offset-4 hover:underline">{userInfo?.displayName}</div>
+              </div>
+              <div className="rounded-lg border-2 border-white text-white text-md py-2 px-4 bg-black bg-opacity-10">
+                Dashboard
+              </div>
             </div>
           </>
         ) : (

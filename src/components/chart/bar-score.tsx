@@ -6,13 +6,15 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const ProgressBar = ({ label, value, desc }: { label: string; value: number; desc: string }) => {
   value = value > 10 ? value * 0.01 : value * 0.1;
 
+  const color = value > 80 ? "#5ab56e" : value > 70 ? "#524EC6" : "#ff473e";
+
   const data = {
     labels: [label, "Remaining"],
     datasets: [
       {
         data: [value, 1 - value],
-        backgroundColor: ["#5d70ef", "#E0E0E0"],
-        borderColor: ["#5d70ef", "#E0E0E0"],
+        backgroundColor: [color, "#E0E0E0"],
+        borderColor: [color, "#E0E0E0"],
         borderWidth: 1,
       },
     ],
@@ -47,7 +49,7 @@ const ProgressBar = ({ label, value, desc }: { label: string; value: number; des
             ctx.font = "bold 12px Arial";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillStyle = "#524EC6"; // Text color
+            ctx.fillStyle = color; // Text color
             ctx.fillText(`${(value * 100).toFixed(1)}%`, centerX, centerY);
             ctx.restore();
           }
