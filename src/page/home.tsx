@@ -80,10 +80,9 @@ const Home = () => {
       setIsLoading(true);
       try {
         const resultTemp = await analyzeCV(jobTitle, jobDescription, industry.label.toString());
-        console.log("result:",resultTemp)
         const resumeResult = JSON.stringify(resultTemp);
         localStorage.setItem("resume-result", resumeResult);
-        localStorage.setItem("resume-details", JSON.stringify({ jobTitle, jobDescription }));
+        localStorage.setItem("resume-details", JSON.stringify({ jobTitle, jobDescription, industry: industry.label.toString() }));
         navigate("/cv-analyzer/result");
       } catch (error) {
         console.log(error);

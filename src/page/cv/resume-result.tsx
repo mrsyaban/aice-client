@@ -8,12 +8,16 @@ import { useNavigate } from "react-router-dom";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import CheckIcon from "@/assets/icons/check-icon.svg";
 import CrossIcon from "@/assets/icons/cross-icon.svg";
+import { addVacancy } from "@/services/api";
+import { Loader2 } from "lucide-react";
 
 const ResumeResult = () => {
   const [jobTitle, setJobTitle] = useState<string>("");
   const [jobDescription, setJobDescription] = useState<string>("");
   const [result, setResult] = useState<CvResult | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [industry, setIndustry] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -24,12 +28,24 @@ const ResumeResult = () => {
     }
     const resumeDetails = localStorage.getItem("resume-details");
     if (resumeDetails) {
-      const { jobTitle, jobDescription } = JSON.parse(resumeDetails);
+      const { jobTitle, jobDescription, industry } = JSON.parse(resumeDetails);
       setJobTitle(jobTitle);
       setJobDescription(jobDescription);
+      setIndustry(industry);
     }
   }, []);
 
+  const handleGenerateQuestions = async () => {
+    setIsLoading(true);
+    try {
+      const vacancyId = await addVacancy(jobTitle, jobDescription, industry);
+      navigate(`/questions/${vacancyId}`);
+    } catch (error) {
+      console.error("Error generating questions:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <>
       <Toaster />
@@ -63,23 +79,21 @@ const ResumeResult = () => {
                   {result.judgements.map((judgement, index) => (
                     <TableRow key={index} className="border-b-4 border-white">
                       <TableCell className="font-medium pl-4">{judgement.requirement}</TableCell>
-                      <TableCell className="text-right pr-8">
-                        {judgement.isFit 
-                          ? <img src={CheckIcon} alt="fit" className="h-6 w-6" /> 
-                          : <img src={CrossIcon} alt="not-fit" className="h-6 w-6"/>
-                        }
-                      </TableCell>
+                      <TableCell className="text-right pr-8">{judgement.isFit ? <img src={CheckIcon} alt="fit" className="h-6 w-6" /> : <img src={CrossIcon} alt="not-fit" className="h-6 w-6" />}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
-              {result.relevanceScore < 80 && (
-                <div className="text-lg font-semibold text-[#c0322a]">
-                  Your resume is not fit with the job requirements. Please consider improving your resume instead of start practicing interview.
-                </div>
-              )}
-              <div className="self-start bg-primary-blue text-white text-lg py-2 px-4 rounded-lg font-semibold">
-                Generate interview questions
+              {result.relevanceScore < 80 && <div className="text-lg font-semibold text-[#c0322a]">Your resume is not fit with the job requirements. Please consider improving your resume instead of start practicing interview.</div>}
+              <div onClick={handleGenerateQuestions} className="self-start cursor-pointer bg-primary-blue text-white text-lg py-2 px-4 rounded-lg font-semibold">
+                {isLoading ? (
+                  <div className="text-slate-400 flex flex-row items-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin " />
+                    Generating questions...
+                  </div>
+                ) : (
+                  "Generate interview questions"
+                )}
               </div>
               <ScoreBarChart value={result.quantifiedScore} label="Quantification Score" desc="How much quantification that justifies your achievements" />
               <div className="flex flex-row gap-6">

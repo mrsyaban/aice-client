@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const ProgressBar = ({ label, value, desc }: { label: string; value: number; desc: string }) => {
   value = value > 10 ? value * 0.01 : value * 0.1;
 
-  const color = value > 80 ? "#5ab56e" : value > 70 ? "#524EC6" : "#ff473e";
+  const color = value > 0.8 ? "#5ab56e" : value > 0.7 ? "#524EC6" : "#ff473e";
 
   const data = {
     labels: [label, "Remaining"],

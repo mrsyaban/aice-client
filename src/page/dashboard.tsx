@@ -3,7 +3,8 @@ import Select, { SingleValue } from "react-select";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import { format, addHours } from "date-fns";
-import { DockIcon, Loader2, Upload } from "lucide-react";
+import { Loader2, Upload } from "lucide-react";
+
 import toast from "react-hot-toast";
 
 import { Job } from "@/types/job";
@@ -14,7 +15,7 @@ import useAuthStore from "@/store/authStore";
 import Navbar from "@/components/common/navbar";
 import { industriesData } from "@/utils/industry";
 
-import { addVacancy, getCV, uploadCV } from "@/services/api";
+import { addVacancy, analyzeCV, getCV, uploadCV } from "@/services/api";
 import { getInterviews, getVacancies } from "@/services/api";
 
 const Dashboard = () => {
@@ -31,6 +32,7 @@ const Dashboard = () => {
 
   // Cv Analyzer and generate questions
   const [fileName, setFileName] = useState<string>("");
+  const [isLoadingCV, setIsLoadingCV] = useState(false);
 
   const textareaRef = useRef(null);
   const questionRef = useRef(null);
@@ -43,13 +45,15 @@ const Dashboard = () => {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file && file.type === "application/pdf") {
-      await uploadCV(file).then((res) => {
-        if (res) {
-          setFileName(res.name);
-        }
-      }).catch((err) => {
-        console.error(err);
-      });
+      await uploadCV(file)
+        .then((res) => {
+          if (res) {
+            setFileName(res.name);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } else {
       toast.error("Please upload a valid pdf resume file.");
     }
@@ -83,8 +87,30 @@ const Dashboard = () => {
     }
   };
 
-  const handleAnalyzeCV = () => {
-    navigate("/cv-analyzer?jobTitle=" + jobTitle + "&jobDescription=" + jobDescription);
+  const handleAnalyzeCV = async () => {
+    if (!isAuthenticated) {
+      navigate("/auth/signin");
+    }
+    if (!jobTitle || !jobDescription || !industry || !fileName) {
+      setErrorMessage("cv, job title, company's industry, and job description are required.");
+      return;
+    }
+
+    if (isAuthenticated) {
+      setIsLoadingCV(true);
+      try {
+        const resultTemp = await analyzeCV(jobTitle, jobDescription, industry.label.toString());
+        const resumeResult = JSON.stringify(resultTemp);
+        localStorage.setItem("resume-result", resumeResult);
+        localStorage.setItem("resume-details", JSON.stringify({ jobTitle, jobDescription, industry: industry.label.toString() }));
+        navigate("/cv-analyzer/result");
+      } catch (error) {
+        console.log(error);
+        setErrorMessage("An error occurred while analyzing your resume. Please try again.");
+      } finally {
+        setIsLoadingCV(false);
+      }
+    }
   };
 
   const handleAnalyzeInterview = () => {
@@ -125,13 +151,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     setIndustries(industriesData.map((industry, index) => ({ id: index, label: industry })));
-    getCV().then((res) => {
-      if (res) {
-        setFileName(res.name);
-      }
-    }).catch((err) => {
-      console.error(err);
-    });
+    getCV()
+      .then((res) => {
+        if (res) {
+          setFileName(res.name);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   const navigate = useNavigate();
@@ -198,10 +226,12 @@ const Dashboard = () => {
                     placeholder="paste your detailed job description & job requirement here"
                   />
                 </div>
-                {!fileName? (
+                {!fileName ? (
                   <div
                     {...getRootProps()}
-                    className={`flex flex-col col-span-3 items-center justify-center bg-white w-full h-20 border-2 border-dashed border-primary-blue rounded-lg p-4 cursor-pointer ${isDragActive ? "border-primary-blue bg-blue-50" : "border-gray-300"}`}
+                    className={`flex flex-col col-span-3 items-center justify-center bg-white w-full h-20 border-2 border-dashed border-primary-blue rounded-lg p-4 cursor-pointer ${
+                      isDragActive ? "border-primary-blue bg-blue-50" : "border-gray-300"
+                    }`}
                   >
                     <input {...getInputProps()} />
                     <div className="flex flex-col items-center">
@@ -240,8 +270,14 @@ const Dashboard = () => {
                   onClick={handleAnalyzeCV}
                   className="py-5 px-8 w-full hover:opacity-90 cursor-pointer border-2 border-primary-yellow bg-secondary-yellow font-semibold text-xl flex items-center justify-center text-primary-yellow rounded-lg"
                 >
-                  <DockIcon className="mr-2 h-4 w-4" />
-                  Grade my resume
+                  {isLoadingCV ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Analyzing your resume...
+                    </>
+                  ) : (
+                    "Grade my resume"
+                  )}
                 </div>
               </div>
             </div>
