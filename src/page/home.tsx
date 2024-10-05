@@ -7,8 +7,8 @@ import toast from "react-hot-toast";
 // import { Loader2 } from "lucide-react";
 
 import { Industry } from "@/types/industry";
-import SonImage from "@/assets/testi/son.png";
-import TestiCard from "@/components/card/testi";
+// import SonImage from "@/assets/testi/son.png";
+// import TestiCard from "@/components/card/testi";
 import Navbar from "@/components/common/navbar";
 import { industriesData } from "@/utils/industry";
 import FeatureCard from "@/components/card/feature";
@@ -260,11 +260,11 @@ const Home = () => {
             <FeatureCard title="Resume grader" description="Craft a new powerful resume to attract recruiters and get a call to the next round" path="cv-analyzer" color="bg-[#b4491b]" />
           </div>
         </div>
-        <div className="flex flex-col h-fit gap-8 items-center bg-primary-white w-full pb-16">
+        {/* <div className="flex flex-col h-fit gap-8 items-center bg-primary-white w-full pb-16">
           <div className="flex flex-row justify-center gap-24 h-full">
             <TestiCard image={SonImage} message="feel so much more confident after I used AICe." nick="John Doe" age={25} />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
