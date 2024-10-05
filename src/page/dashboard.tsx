@@ -235,7 +235,7 @@ const Dashboard = () => {
               {jobs.length > 0 ? (
                 <div className="flex flex-col gap-6 w-full ">
                   {jobs
-                    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                    // .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                     .map((job, idx) => (
                       <div key={idx} className="flex flex-row w-full py-4 px-6 bg-white rounded-lg gap-4 justify-between">
                         <div className="flex flex-col justify-between gap-10 w-full">
@@ -246,7 +246,7 @@ const Dashboard = () => {
                             </div>
                           </div>
                           <div className="flex flex-row justify-between items-center">
-                            <div className="text-lg text-primary-blue text-left w-full font-semibold">Generated on {formatDate(job.created_at)}</div>
+                            <div className="text-lg text-primary-blue text-left w-full font-semibold">Generated on {formatDate(job.created_at || new Date())}</div>
                             <div
                               onClick={() => navigate(`/questions/${job.id}`)}
                               className="py-2 px-6 bg-primary-blue hover:bg-opacity-80 text-white font-bold w-fit flex items-center justify-center cursor-pointer h-fit rounded-md text-nowrap"
@@ -271,13 +271,13 @@ const Dashboard = () => {
               ) : (
                 <div className="flex flex-col gap-6 w-full max-w-[1000px]">
                   {interviews
-                    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                    // .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                     .map((interview, idx) => (
                       <div key={idx} className="flex flex-row w-full py-4 px-6 bg-white rounded-lg gap-4 justify-between">
                         <div className="flex flex-col w-full gap-10">
                           <div className="text-2xl font-bold text-[#a057e9] overflow-hidden text-ellipsis line-clamp-4 whitespace-pre-wrap">{interview.question}</div>
                           <div className="flex flex-row justify-between items-center">
-                            <div className="text-lg text-[#a057e9] text-nowrap text-left font-semibold">Generated on {formatDate(interview.created_at)}</div>
+                            <div className="text-lg text-[#a057e9] text-nowrap text-left font-semibold">Generated on {formatDate(interview.created_at || new Date())}</div>
                             <div
                               onClick={() => navigate(`/interview-analysis-result/${interview.id}`)}
                               className={`py-2 px-6  font-bold w-fit hover:bg-opacity-80 flex items-center h-fit rounded-md justify-center cursor-pointer text-nowrap ${interview.status === InterviewStatus.SUCCESS ? "bg-[#a057e9] text-white" : " border text-[#a057e9] bg-[#c59eeb] border-[#a057e9]"}`}
